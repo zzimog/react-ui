@@ -10,6 +10,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const isBuildDemo = mode === 'demo';
+  const outDir = isBuildDemo ? 'dist-demo' : 'dist';
 
   return {
     base: '/react-zimog-ui',
@@ -31,8 +32,8 @@ export default defineConfig(({ mode }) => {
         name: 'copy-404',
         closeBundle() {
           copyFileSync(
-            resolve(__dirname, `dist/index.html`),
-            resolve(__dirname, `dist/404.html`)
+            resolve(__dirname, outDir, 'index.html'),
+            resolve(__dirname, outDir, '404.html')
           );
         },
       },
@@ -43,7 +44,7 @@ export default defineConfig(({ mode }) => {
       host: true,
     },
     build: {
-      outDir: isBuildDemo ? 'dist-demo' : 'dist',
+      outDir,
     },
     /*
     build: {
