@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => {
           ],
           output: {
             preserveModules: true,
-            preserveModulesRoot: 'lib',
+            preserveModulesRoot: 'src/ui',
             entryFileNames: '[name].js',
             assetFileNames: 'assets/[name][extname]',
           },
