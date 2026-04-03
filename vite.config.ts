@@ -5,8 +5,7 @@ import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-
-//import pkg from './package.json';
+import pkg from './package.json';
 
 export default defineConfig(({ mode }) => {
   const isBuildDemo = mode === 'demo';
@@ -31,10 +30,12 @@ export default defineConfig(({ mode }) => {
       {
         name: 'copy-404',
         closeBundle() {
-          copyFileSync(
-            resolve(__dirname, outDir, 'index.html'),
-            resolve(__dirname, outDir, '404.html')
-          );
+          if (isBuildDemo) {
+            copyFileSync(
+              resolve(__dirname, outDir, 'index.html'),
+              resolve(__dirname, outDir, '404.html')
+            );
+          }
         },
       },
     ],
@@ -45,23 +46,29 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir,
+      ...(!isBuildDemo && {
+        copyPublicDir: false,
+        lib: {
+          entry: resolve(__dirname, 'src/ui/index.ts'),
+          name: 'react-ui',
+          formats: ['es'],
+          fileName: 'index',
+        },
+        rollupOptions: {
+          external: [
+            'react',
+            'react-dom',
+            'react/jsx-runtime',
+            ...Object.keys(pkg.dependencies),
+          ],
+          output: {
+            preserveModules: true,
+            preserveModulesRoot: 'lib',
+            entryFileNames: '[name].js',
+            assetFileNames: 'assets/[name][extname]',
+          },
+        },
+      }),
     },
-    /*
-    build: {
-      copyPublicDir: false,
-      lib: {
-        entry: './src/ui/index.ts',
-        name: 'zimog-ui',
-        formats: ['es'],
-        fileName: 'index',
-      },
-      rollupOptions: {
-        external: [
-          'react/jsx-runtime',
-          ...Object.keys(pkg.peerDependencies || {}),
-        ],
-      },
-    },
-  */
   };
 });
