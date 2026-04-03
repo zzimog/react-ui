@@ -24,16 +24,19 @@ export default () => (
 );
 ```
 
-## Examples
+## Props
 
-### Example 1
+This component extends the `<div />` props.
 
-> Quote
-
-### Example 2
-
-> Quote
-
-### Example 3
-
-> Quote
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    }
+  ]}
+/>

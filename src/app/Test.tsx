@@ -9,9 +9,7 @@ import {
   Trash,
 } from 'lucide-react';
 import {
-  Button,
   Card,
-  Dismissable,
   Field,
   Input,
   Label,
@@ -24,29 +22,11 @@ import {
 } from '@ui';
 
 export const TestPage = () => {
-  const [dismissRoot, setDismissRoot] = useState(false);
-  const [dismissChild, setDismissChild] = useState(false);
   const [sliderValue, setSliderValue] = useState(12);
 
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
-
-      <Button onClick={() => setDismissRoot(false)}>Dismiss root</Button>
-      {!dismissRoot && (
-        <Dismissable
-          onEscapeKey={() => console.log('escape key')}
-          onDismiss={() => setDismissRoot(true)}
-        >
-          Dismissable here
-          <Button onClick={() => setDismissChild(false)}>Dismiss child</Button>
-          {!dismissChild && (
-            <Dismissable onDismiss={() => setDismissChild(true)}>
-              Heh
-            </Dismissable>
-          )}
-        </Dismissable>
-      )}
 
       <Field.Set className="mx-auto w-xs">
         <Field.Legend>Theme</Field.Legend>

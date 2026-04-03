@@ -14,7 +14,7 @@ export default {
     'hover:underline',
     'focusable',
     'focus-visible:outline-outline',
-    '[&[data-open=true]>svg]:-rotate-180',
+    '[&[data-open=true]>svg]:-rotate-45',
   ].join(' '),
   arrow: 'size-4 transition-transform shrink-0',
   content: 'pt-0 pb-4',

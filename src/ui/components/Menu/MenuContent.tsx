@@ -1,5 +1,5 @@
-import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
-import { Dismissable, Native, Popper, type NativeProps } from '@ui/headless';
+import { useEffect, useRef, type ComponentProps } from 'react';
+import { Dismissable, Native, Popper } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
@@ -9,8 +9,8 @@ const NAV_KEYS = ['Home', 'End', 'ArrowUp', 'ArrowDown'];
 
 const DISPLAY_NAME = 'MenuContent';
 
-type PopperContentProps = ComponentPropsWithRef<typeof Popper.Content>;
-type BaseProps = NativeProps<'div'>;
+type PopperContentProps = ComponentProps<typeof Popper.Content>;
+type BaseProps = ComponentProps<typeof Dismissable>;
 type MenuProps = BaseProps & {
   distance?: number;
   side?: PopperContentProps['side'];
@@ -27,6 +27,8 @@ export const MenuContent = (inProps: MenuProps) => {
     onContextMenu,
     onPointerLeave,
     onKeyDown,
+    onFocusOutside,
+    onDismiss,
     ...props
   } = inProps;
 
@@ -51,8 +53,11 @@ export const MenuContent = (inProps: MenuProps) => {
     >
       <Dismissable
         asChild
-        onFocusOutside={(event) => event.preventDefault()}
-        onDismiss={() => context.onOpenChange(false)}
+        onFocusOutside={onFocusOutside}
+        onDismiss={() => {
+          onDismiss?.();
+          context.onOpenChange(false);
+        }}
       >
         <Native.div
           ref={mergedRef}

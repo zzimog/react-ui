@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
 import { AccordionItem } from './AccordionItem';
@@ -24,7 +24,7 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
       })}
     >
       {children}
-      <ChevronDown className={classes.arrow} />
+      <Plus className={classes.arrow} />
     </Native.button>
   );
 };

@@ -1,0 +1,174 @@
+# Accordion
+
+The `<Accordion />` component let user expand and collapse sections with lot of secondary content.
+
+<Demo>
+  <Accordion className="mx-auto max-w-md">
+    <Accordion.Item value="1">
+      <Accordion.Trigger>Lorem ipsum</Accordion.Trigger>
+      <Accordion.Content>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+        molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+        repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+        minus saepe odit consequatur!
+      </Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="2">
+      <Accordion.Trigger>Dolor sit</Accordion.Trigger>
+      <Accordion.Content>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+        molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+        repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+        minus saepe odit consequatur!
+      </Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item value="3">
+      <Accordion.Trigger>Consectetur</Accordion.Trigger>
+      <Accordion.Content>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+        molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+        repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+        minus saepe odit consequatur!
+      </Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
+</Demo>
+
+```tsx
+<Accordion>
+  <Accordion.Item value="1">
+    <Accordion.Trigger>Lorem ipsum</Accordion.Trigger>
+    <Accordion.Content>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+      molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+      repudiandae optio praesentium id provident dolore quis ipsa? Quidem minus
+      saepe odit consequatur!
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="2">
+    <Accordion.Trigger>Dolor sit</Accordion.Trigger>
+    <Accordion.Content>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+      molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+      repudiandae optio praesentium id provident dolore quis ipsa? Quidem minus
+      saepe odit consequatur!
+    </Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value="3">
+    <Accordion.Trigger>Consectetur</Accordion.Trigger>
+    <Accordion.Content>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+      molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+      repudiandae optio praesentium id provident dolore quis ipsa? Quidem minus
+      saepe odit consequatur!
+    </Accordion.Content>
+  </Accordion.Item>
+</Accordion>
+```
+
+## Usage
+
+```tsx
+import { Accordion } from '@ui';
+
+export default () => (
+  <>
+    <Accordion>
+      <Accordion.Item>
+        <Accordion.Trigger />
+        <Accordion.Content />
+      </Accordion.Item>
+    </Accordion>
+  </>
+);
+```
+
+## Props
+
+### Root
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+    {
+      name: 'mutiple',
+      type: 'boolean',
+    },
+    {
+      name: 'value',
+      type: 'string | string[]',
+    },
+    {
+      name: 'defaultValue',
+      type: 'string | string[]',
+    },
+    {
+      name: 'onValueChange',
+      type: '(value: string | string[]): void',
+    },
+  ]}
+/>
+
+### Item
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+    {
+      name: 'value',
+      type: 'string',
+    },
+  ]}
+/>
+
+### Trigger
+
+This component extends the `<button />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+  ]}
+/>
+
+### Content
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+  ]}
+/>

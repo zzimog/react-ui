@@ -6,9 +6,11 @@ import { Menu } from './Menu';
 const DISPLAY_NAME = 'MenuSub';
 
 type MenuSubContextValue = {
+  trigger: HTMLElement | null;
   content: HTMLElement | null;
-  onOpenToggle(): void;
+  onTriggerChange(trigger: HTMLElement | null): void;
   onContentChange(element: HTMLElement | null): void;
+  onOpenToggle(): void;
 };
 
 const [MenuSubContext, useMenuSubContext] = createScopedContext<
@@ -20,8 +22,9 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 type MenuSubProps = PropsWithChildren;
 
 export const MenuSub = (inProps: MenuSubProps) => {
-  const [open, setOpen] = useState(false);
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
   const [content, setContent] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
     setOpen((open) => !open);
@@ -40,9 +43,11 @@ export const MenuSub = (inProps: MenuSubProps) => {
         onOpenChange={setOpen}
       >
         <MenuSubContext
+          trigger={trigger}
           content={content}
-          onOpenToggle={handleToggle}
+          onTriggerChange={setTrigger}
           onContentChange={setContent}
+          onOpenToggle={handleToggle}
         >
           {inProps.children}
         </MenuSubContext>

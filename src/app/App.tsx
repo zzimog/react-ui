@@ -4,6 +4,7 @@ import { ThemeSwitcher } from '@ui';
 import { Logo, MDXLoader, Nav } from '@app/components';
 import { AppMenu } from './AppMenu';
 import {
+  PageAccordion,
   PageCard,
   PageField,
   PageHome,
@@ -17,6 +18,7 @@ import { TestPage as Test } from './Test';
 import './App.css';
 
 const components: Record<string, MDXContent> = {
+  accordion: PageAccordion,
   card: PageCard,
   input: PageInput,
   field: PageField,

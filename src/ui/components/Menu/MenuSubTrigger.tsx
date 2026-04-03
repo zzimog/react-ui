@@ -14,10 +14,10 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
   const { ref: refProp, children, onKeyDown, ...props } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  const { content } = MenuSub.useContext(DISPLAY_NAME);
+  const { content, onTriggerChange } = MenuSub.useContext(DISPLAY_NAME);
 
   const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
+  const mergedRef = useMergedRefs(refProp, ref, onTriggerChange);
 
   useEffect(() => {
     const node = ref.current;

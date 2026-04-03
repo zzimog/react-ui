@@ -21,13 +21,13 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build project
-        run: npm run build
+        run: npm run build:demo
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v6
         with:
           name: production-files
-          path: ./dist
+          path: ./dist-demo
 
   deploy:
     name: Deploy
@@ -40,10 +40,10 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: production-files
-          path: ./dist
+          path: ./dist-demo
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./dist-demo
