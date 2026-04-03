@@ -1,6 +1,6 @@
-import { type ComponentPropsWithRef } from 'react';
+import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
 import { ChevronRight } from 'lucide-react';
-import { Popper } from '@ui/headless';
+import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '../../utils/compose-handlers';
 import { Menu } from './Menu';
 import { MenuSub } from './MenuSub';
@@ -11,24 +11,43 @@ type BaseProps = ComponentPropsWithRef<typeof Menu.Item>;
 type MenuSubTriggerProps = BaseProps;
 
 export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
-  const { children, onClick, onKeyDown, ...props } = inProps;
+  const { ref: refProp, children, onKeyDown, ...props } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  const subContext = MenuSub.useContext(DISPLAY_NAME);
+  const { content } = MenuSub.useContext(DISPLAY_NAME);
+
+  const ref = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRefs(refProp, ref);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      function handleLeave(event: PointerEvent) {
+        const target = event.relatedTarget as HTMLElement;
+        const isInSubTree = content?.contains(target);
+        if (!isInSubTree) {
+          context.onOpenChange(false);
+        }
+      }
+
+      function handleEnter() {
+        context.onOpenChange(true);
+      }
+
+      node.addEventListener('pointerenter', handleEnter);
+      node.addEventListener('pointerleave', handleLeave);
+      return () => {
+        node.removeEventListener('pointerenter', handleEnter);
+        node.removeEventListener('pointerleave', handleLeave);
+      };
+    }
+  }, [context, content]);
 
   return (
-    <Popper.Anchor asChild>
+    <Menu.Trigger asChild>
       <Menu.Item
-        id={subContext.triggerId}
-        aria-haspopup="menu"
-        aria-expanded={context.open}
-        aria-controls={subContext.contentId}
+        ref={mergedRef}
         {...props}
-        onClick={composeHandlers(onClick, () => {
-          if (!props.disabled) {
-            subContext.onOpenToggle();
-          }
-        })}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowRight') {
             context.onOpenChange(true);
@@ -39,7 +58,7 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
         {children}
         <ChevronRight />
       </Menu.Item>
-    </Popper.Anchor>
+    </Menu.Trigger>
   );
 };
 

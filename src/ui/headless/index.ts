@@ -1,5 +1,6 @@
 export * from './BubbleInput';
 export * from './Checkable';
+export * from './Dismissable';
 export * from './FocusTrap';
 export * from './Highlight';
 export * from './Interactive';

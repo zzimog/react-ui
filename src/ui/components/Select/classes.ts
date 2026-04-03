@@ -60,7 +60,6 @@ const classes = {
     'select-none',
     'aria-disabled:text-muted',
     'data-[empty]:text-muted',
-    'data-[empty]:mb-1',
     'data-[active]:bg-highlight',
     'data-[active]:text-highlight-contrast',
   ],

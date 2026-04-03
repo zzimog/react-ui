@@ -10,6 +10,7 @@ const classes = {
     'transition',
     'outline-0',
     'shadow',
+    'focus:border-primary',
   ],
   label: 'text-muted px-2 py-1 text-xs font-extrabold transition',
   separator: 'w-full h-px my-1 bg-border transition',
@@ -30,7 +31,6 @@ const classes = {
     '[&_svg]:size-4',
     'disabled:text-muted',
     'focus:bg-highlight',
-    'aria-expanded:bg-highlight',
   ],
   icon: 'absolute left-2',
 };

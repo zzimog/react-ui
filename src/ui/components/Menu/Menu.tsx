@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { useId, type PropsWithChildren } from 'react';
 import { Popper } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
@@ -18,6 +18,8 @@ import { MenuTrigger } from './MenuTrigger';
 const DISPLAY_NAME = 'Menu';
 
 type MenuContextValue = {
+  triggerId: string;
+  contentId: string;
   open: boolean;
   onOpenChange(open: boolean): void;
 };
@@ -53,12 +55,21 @@ export const Menu = (inProps: MenuProps) => {
     onChange: onOpenChange,
   });
 
+  const baseId = useId();
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
+
   return (
-    <MenuContext open={open} onOpenChange={setOpen}>
-      <MenuCollection>
-        <Popper>{children}</Popper>
-      </MenuCollection>
-    </MenuContext>
+    <Popper>
+      <MenuContext
+        triggerId={triggerId}
+        contentId={contentId}
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <MenuCollection>{children}</MenuCollection>
+      </MenuContext>
+    </Popper>
   );
 };
 

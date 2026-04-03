@@ -22,8 +22,10 @@ export const MenuTrigger = (inProps: MenuTriggerProps) => {
     <Popper.Anchor asChild>
       <Native.button
         ref={mergedRef}
+        id={context.triggerId}
         aria-haspopup="menu"
         aria-expanded={isOpen}
+        aria-controls={context.contentId}
         {...props}
         onClick={composeHandlers(onClick, () => {
           if (!props.disabled) {

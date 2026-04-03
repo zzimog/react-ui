@@ -1,4 +1,5 @@
 import type { ComponentPropsWithRef } from 'react';
+import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
 import { MenuContent } from './MenuContent';
@@ -10,24 +11,26 @@ type BaseProps = ComponentPropsWithRef<typeof MenuContent>;
 type MenuSubContentProps = BaseProps;
 
 export const MenuSubContent = (inProps: MenuSubContentProps) => {
-  const { onKeyDown, ...props } = inProps;
+  const { ref: refProp, onKeyDown, ...props } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  const subContext = MenuSub.useContext(DISPLAY_NAME);
+  const { onContentChange } = MenuSub.useContext(DISPLAY_NAME);
+
+  const mergedRef = useMergedRefs(refProp, onContentChange);
 
   return (
     <Menu.Collection>
       <MenuContent
+        ref={mergedRef}
         side="right"
         align="start"
         distance={0}
-        id={subContext.contentId}
-        aria-labelledby={subContext.triggerId}
+        id={context.contentId}
+        aria-labelledby={context.triggerId}
         {...props}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowLeft') {
             context.onOpenChange(false);
-            event.preventDefault();
           }
         })}
       />

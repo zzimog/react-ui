@@ -9,7 +9,9 @@ import {
   Trash,
 } from 'lucide-react';
 import {
+  Button,
   Card,
+  Dismissable,
   Field,
   Input,
   Label,
@@ -22,11 +24,29 @@ import {
 } from '@ui';
 
 export const TestPage = () => {
+  const [dismissRoot, setDismissRoot] = useState(false);
+  const [dismissChild, setDismissChild] = useState(false);
   const [sliderValue, setSliderValue] = useState(12);
 
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
+
+      <Button onClick={() => setDismissRoot(false)}>Dismiss root</Button>
+      {!dismissRoot && (
+        <Dismissable
+          onEscapeKey={() => console.log('escape key')}
+          onDismiss={() => setDismissRoot(true)}
+        >
+          Dismissable here
+          <Button onClick={() => setDismissChild(false)}>Dismiss child</Button>
+          {!dismissChild && (
+            <Dismissable onDismiss={() => setDismissChild(true)}>
+              Heh
+            </Dismissable>
+          )}
+        </Dismissable>
+      )}
 
       <Field.Set className="mx-auto w-xs">
         <Field.Legend>Theme</Field.Legend>
@@ -47,9 +67,7 @@ export const TestPage = () => {
       </Field.Set>
 
       <Menu>
-        <Menu.Trigger className="mx-auto w-fit border p-2">
-          <span>Menu</span>
-        </Menu.Trigger>
+        <Menu.Trigger className="mx-auto w-fit border p-2">Menu</Menu.Trigger>
         <Menu.Content className="w-64">
           <Menu.Item>
             <Menu.Icon as={ArrowLeft} />
@@ -86,7 +104,7 @@ export const TestPage = () => {
                 <Menu.Icon as={Scissors} />
                 Cut
               </Menu.Item>
-              <Menu.Item>
+              <Menu.Item onClick={() => console.log('copy action')}>
                 <Menu.Icon as={Copy} />
                 Copy
               </Menu.Item>
