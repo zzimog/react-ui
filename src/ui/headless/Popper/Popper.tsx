@@ -5,9 +5,11 @@ import { PopperContent } from './PopperContent';
 
 const DISPLAY_NAME = 'Popper';
 
+export type Measurable = { getBoundingClientRect(): DOMRect };
+
 type PopperContextType = {
-  anchor: HTMLElement | null;
-  onAnchorChange(node: HTMLElement | null): void;
+  anchor: Measurable | null;
+  onAnchorChange(node: Measurable | null): void;
 };
 
 const [PopperContext, usePopperContext] = createScopedContext<
@@ -19,7 +21,7 @@ const [PopperContext, usePopperContext] = createScopedContext<
 type PopperProps = PropsWithChildren;
 
 export const Popper = (props: PopperProps) => {
-  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const [anchor, setAnchor] = useState<Measurable | null>(null);
 
   return (
     <PopperContext anchor={anchor} onAnchorChange={setAnchor} {...props} />

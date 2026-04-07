@@ -31,91 +31,104 @@ export const TestPage = () => {
   const [showIcons, setShowIcons] = useState(true);
   const [sliderValue, setSliderValue] = useState(12);
 
+  const DemoMenu = (
+    <Menu.Content className="w-64">
+      <Menu.Item>
+        <Menu.Icon as={ArrowLeft} />
+        Previous
+      </Menu.Item>
+      <Menu.Item>
+        <Menu.Icon as={ArrowRight} />
+        Next
+      </Menu.Item>
+      <Menu.Separator />
+      <Menu.RadioGroup value={size} onValueChange={setSize}>
+        <Menu.Label>Icon size</Menu.Label>
+        <Menu.RadioItem value="sm">Small</Menu.RadioItem>
+        <Menu.RadioItem value="md">Medium</Menu.RadioItem>
+        <Menu.RadioItem value="lg">Large</Menu.RadioItem>
+      </Menu.RadioGroup>
+      <Menu.Separator />
+      <Menu.CheckboxItem checked={arrange} onCheckedChange={setArrange}>
+        Auto arrange icons
+      </Menu.CheckboxItem>
+      <Menu.CheckboxItem checked={align} onCheckedChange={setAlign}>
+        Align icons to grid
+      </Menu.CheckboxItem>
+      <Menu.Separator />
+      <Menu.CheckboxItem checked={showIcons} onCheckedChange={setShowIcons}>
+        Show icons
+      </Menu.CheckboxItem>
+      <Menu.Separator />
+      <Menu.Sub>
+        <Menu.SubTrigger>More options</Menu.SubTrigger>
+        <Menu.SubContent>
+          <Menu.Sub>
+            <Menu.SubTrigger>New</Menu.SubTrigger>
+            <Menu.SubContent>
+              <Menu.Item>
+                File
+                <Menu.Icon as={File} />
+              </Menu.Item>
+              <Menu.Item>
+                Folder
+                <Menu.Icon as={Folder} />
+              </Menu.Item>
+              <Menu.Separator />
+              <Menu.Item>
+                Shortcut
+                <Menu.Icon as={FileSymlink} />
+              </Menu.Item>
+              <Menu.Item>
+                Text document
+                <Menu.Icon as={Text} />
+              </Menu.Item>
+            </Menu.SubContent>
+          </Menu.Sub>
+          <Menu.Separator />
+          <Menu.Item>
+            <Menu.Icon as={Scissors} />
+            Cut
+          </Menu.Item>
+          <Menu.Item onClick={() => console.log('copy action')}>
+            <Menu.Icon as={Copy} />
+            Copy
+          </Menu.Item>
+          <Menu.Separator />
+          <Menu.Item disabled>
+            <Menu.Icon as={Trash} />
+            Delete
+          </Menu.Item>
+          <Menu.Item>
+            <Menu.Icon as={PencilLine} />
+            Rename
+          </Menu.Item>
+        </Menu.SubContent>
+      </Menu.Sub>
+    </Menu.Content>
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
 
       <Menu>
-        <Menu.Trigger className="mx-auto w-fit border p-2">Menu</Menu.Trigger>
-        <Menu.Content className="w-64">
-          <Menu.Item>
-            <Menu.Icon as={ArrowLeft} />
-            Previous
-          </Menu.Item>
-          <Menu.Item>
-            <Menu.Icon as={ArrowRight} />
-            Next
-          </Menu.Item>
-          <Menu.Separator />
-          <Menu.RadioGroup value={size} onValueChange={setSize}>
-            <Menu.Label>Icon size</Menu.Label>
-            <Menu.RadioItem value="sm">Small</Menu.RadioItem>
-            <Menu.RadioItem value="md">Medium</Menu.RadioItem>
-            <Menu.RadioItem value="lg">Large</Menu.RadioItem>
-          </Menu.RadioGroup>
-          <Menu.Separator />
-          <Menu.CheckboxItem checked={arrange} onCheckedChange={setArrange}>
-            Auto arrange icons
-          </Menu.CheckboxItem>
-          <Menu.CheckboxItem checked={align} onCheckedChange={setAlign}>
-            Align icons to grid
-          </Menu.CheckboxItem>
-          <Menu.Separator />
-          <Menu.CheckboxItem checked={showIcons} onCheckedChange={setShowIcons}>
-            Show icons
-          </Menu.CheckboxItem>
-          <Menu.Separator />
-          <Menu.Sub>
-            <Menu.SubTrigger>More options</Menu.SubTrigger>
-            <Menu.SubContent>
-              <Menu.Sub>
-                <Menu.SubTrigger>New</Menu.SubTrigger>
-                <Menu.SubContent>
-                  <Menu.Item>
-                    File
-                    <Menu.Icon as={File} />
-                  </Menu.Item>
-                  <Menu.Item>
-                    Folder
-                    <Menu.Icon as={Folder} />
-                  </Menu.Item>
-                  <Menu.Separator />
-                  <Menu.Item>
-                    Shortcut
-                    <Menu.Icon as={FileSymlink} />
-                  </Menu.Item>
-                  <Menu.Item>
-                    Text document
-                    <Menu.Icon as={Text} />
-                  </Menu.Item>
-                </Menu.SubContent>
-              </Menu.Sub>
-              <Menu.Separator />
-              <Menu.Item>
-                <Menu.Icon as={Scissors} />
-                Cut
-              </Menu.Item>
-              <Menu.Item onClick={() => console.log('copy action')}>
-                <Menu.Icon as={Copy} />
-                Copy
-              </Menu.Item>
-              <Menu.Separator />
-              <Menu.Item disabled>
-                <Menu.Icon as={Trash} />
-                Delete
-              </Menu.Item>
-              <Menu.Item>
-                <Menu.Icon as={PencilLine} />
-                Rename
-              </Menu.Item>
-            </Menu.SubContent>
-          </Menu.Sub>
-        </Menu.Content>
+        <Menu.Trigger className="mx-auto w-fit border p-2">
+          Click here...
+        </Menu.Trigger>
+        {DemoMenu}
       </Menu>
 
-      <Field.Set className="mx-auto max-w-full w-xs">
+      <Menu>
+        <Menu.ContextArea className="rounded-shape mx-auto w-fit border-2 border-dashed border-current p-4">
+          ...or right-click here!
+        </Menu.ContextArea>
+        {DemoMenu}
+      </Menu>
+
+      <Field.Set className="mx-auto w-xs max-w-full">
         <Field.Legend>Theme</Field.Legend>
-        <RadioGroup defaultValue="2">
+        <RadioGroup defaultValue="dark">
           <Label>
             <RadioGroup.Item id="r1" value="light" />
             Light

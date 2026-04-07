@@ -10,7 +10,11 @@ const classes = {
     'transition',
     'outline-0',
     'shadow-sm',
-    'focus:border-primary',
+    /**
+     * Debug only
+     * @todo To be removed
+     */
+    'focus:border-foreground',
   ],
   label: 'text-muted px-2 py-1 text-xs font-extrabold transition',
   separator: 'w-full h-px my-1 bg-border transition',

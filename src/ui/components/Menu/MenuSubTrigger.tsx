@@ -48,14 +48,6 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
       <Menu.Item
         ref={mergedRef}
         {...props}
-        onSelect={(event) => {
-          event.preventDefault();
-        }}
-        onPointerMove={(event) => {
-          if (context.open) {
-            event.preventDefault();
-          }
-        }}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowRight') {
             context.onOpenChange(true);

@@ -55,8 +55,8 @@ export const Dismissable = (inProps: DismissableProps) => {
   const handleDismiss = useCallback(
     (event: Event) => {
       if (!event.defaultPrevented && onDismiss) {
-        event.preventDefault();
         onDismiss();
+        event.preventDefault();
       }
     },
     [onDismiss]

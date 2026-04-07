@@ -27,9 +27,10 @@ export const MenuTrigger = (inProps: MenuTriggerProps) => {
         aria-expanded={isOpen}
         aria-controls={context.contentId}
         {...props}
-        onClick={composeHandlers(onClick, () => {
+        onClick={composeHandlers(onClick, (event) => {
           if (!props.disabled) {
             context.onOpenChange(!isOpen);
+            event.preventDefault();
           }
         })}
       />

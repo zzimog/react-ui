@@ -1,9 +1,11 @@
+import type { Measurable } from './Popper';
+
 type ContentSide = 'top' | 'bottom' | 'left' | 'right';
 
 type ContentAlign = 'start' | 'center' | 'end';
 
 type PlaceContentOptions = {
-  anchor: HTMLElement;
+  anchor: Measurable;
   content: HTMLElement;
   distance?: number;
   padding?: number;

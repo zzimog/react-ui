@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useCallbackRef, useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
-import { FocusStack } from './focus-stack';
+import { FocusStack, useFocusStackAPI } from './focus-stack';
 import { getFocusableEdges } from './get-focusable-edges';
 import { useFocusGuards } from './use-focus-guards';
 
 const DISPLAY_NAME = 'FocusTrap';
-const EVENT_MOUNT = `${DISPLAY_NAME}.MOUNT`;
-const EVENT_UNMOUNT = `${DISPLAY_NAME}.UNMOUNT`;
+const MOUNT_EVENT = `${DISPLAY_NAME}.MOUNT`;
+const UNMOUNT_EVENT = `${DISPLAY_NAME}.UNMOUNT`;
 const EVENT_OPTIONS = { bubbles: false, cancelable: true };
 
 type BaseProps = NativeProps<'div'>;
@@ -36,8 +36,8 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
     ...props
   } = inProps;
 
-  const enabledRef = useRef(true);
-  const previousFocusedRef = useRef<HTMLElement>(null);
+  const stackAPI = useFocusStackAPI();
+
   const lastFocusedRef = useRef<HTMLElement>(null);
 
   const ref = useRef<HTMLElement>(null);
@@ -48,10 +48,9 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
 
   useEffect(() => {
     const node = ref.current;
-    const isEnabled = enabledRef.current;
     if (node && trapped) {
-      function handleFocusIn(event: FocusEvent) {
-        if (node && isEnabled) {
+      const handleFocusIn = (event: FocusEvent) => {
+        if (stackAPI.enabled) {
           const target = event.target as HTMLElement;
           if (node.contains(target)) {
             lastFocusedRef.current = target;
@@ -59,16 +58,16 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
             focus(lastFocusedRef.current);
           }
         }
-      }
+      };
 
-      function handleFocusOut(event: FocusEvent) {
-        if (node && isEnabled) {
+      const handleFocusOut = (event: FocusEvent) => {
+        if (stackAPI.enabled) {
           const relatedTarget = event.relatedTarget as HTMLElement;
           if (relatedTarget && !node.contains(relatedTarget)) {
             focus(lastFocusedRef.current);
           }
         }
-      }
+      };
 
       const observer = new MutationObserver((mutations: MutationRecord[]) => {
         if (document.activeElement === document.body) {
@@ -89,46 +88,41 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
         document.removeEventListener('focusout', handleFocusOut);
       };
     }
-  }, [trapped]);
+  }, [stackAPI, trapped]);
 
   useEffect(() => {
     const node = ref.current;
     if (node) {
-      const currentActive = document.activeElement as HTMLElement | null;
-      if (!node.contains(currentActive)) {
-        const eventMount = new CustomEvent(EVENT_MOUNT, EVENT_OPTIONS);
-        node.addEventListener(EVENT_MOUNT, onMount);
-        node.dispatchEvent(eventMount);
+      FocusStack.add(stackAPI);
 
-        if (!eventMount.defaultPrevented) {
+      const previousActive = document.activeElement as HTMLElement | null;
+      if (!node.contains(previousActive)) {
+        const mountEvent = new CustomEvent(MOUNT_EVENT, EVENT_OPTIONS);
+        node.addEventListener(MOUNT_EVENT, onMount, { once: true });
+        node.dispatchEvent(mountEvent);
+        if (!mountEvent.defaultPrevented) {
           const [first] = getFocusableEdges(node);
           first?.focus();
-          console.log(first);
-        }
 
-        previousFocusedRef.current = currentActive;
+          if (document.activeElement === previousActive) {
+            node.focus({ preventScroll: true });
+          }
+        }
       }
 
-      FocusStack.add(enabledRef);
       return () => {
-        node.removeEventListener(EVENT_MOUNT, onMount);
+        FocusStack.remove(stackAPI);
 
-        setTimeout(() => {
-          const eventUnmount = new CustomEvent(EVENT_UNMOUNT, EVENT_OPTIONS);
-          node.addEventListener(EVENT_UNMOUNT, onUnmount);
-          node.dispatchEvent(eventUnmount);
-
-          if (!eventUnmount.defaultPrevented) {
-            const focusTarget = previousFocusedRef.current ?? document.body;
-            focusTarget?.focus();
-          }
-
-          FocusStack.remove(enabledRef);
-          node.removeEventListener(EVENT_UNMOUNT, onUnmount);
-        });
+        const unmountEvent = new CustomEvent(UNMOUNT_EVENT, EVENT_OPTIONS);
+        node.addEventListener(UNMOUNT_EVENT, onUnmount, { once: true });
+        node.dispatchEvent(unmountEvent);
+        if (!unmountEvent.defaultPrevented) {
+          const focusTarget = previousActive ?? document.body;
+          focusTarget?.focus();
+        }
       };
     }
-  }, [onMount, onUnmount]);
+  }, [stackAPI, onMount, onUnmount]);
 
   useFocusGuards();
 

@@ -56,6 +56,7 @@ export const RadioGroup = (inProps: RadioGroupProps) => {
   });
 
   const baseId = useId();
+  const hasValue = value !== '';
 
   return (
     <RadioGroupContext
@@ -70,7 +71,7 @@ export const RadioGroup = (inProps: RadioGroupProps) => {
           role="radiogroup"
           aria-required={required ? true : undefined}
           aria-disabled={disabled ? true : undefined}
-          tabIndex={-1}
+          tabIndex={hasValue ? -1 : 0}
           {...props}
           className={cn(classes.root, className)}
         />

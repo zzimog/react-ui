@@ -43,6 +43,7 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
           if (event.key === 'ArrowLeft') {
             context.onOpenChange(false);
             trigger?.focus();
+            event.preventDefault();
           }
         })}
       />

@@ -1,0 +1,33 @@
+import { useRef, type ComponentProps } from 'react';
+import { Popper } from '@ui/headless';
+import { composeHandlers } from '@ui/utils';
+import { Menu } from './Menu';
+
+const DISPLAY_NAME = 'MenuContextArea';
+
+type BaseProps = ComponentProps<typeof Popper.Anchor>;
+type MenuContextAreaProps = BaseProps;
+
+export const MenuContextArea = (inProps: MenuContextAreaProps) => {
+  const { onContextMenu, ...props } = inProps;
+
+  const virtualRef = useRef(DOMRect.fromRect({ x: 0, y: 0 }));
+  const context = Menu.useContext(DISPLAY_NAME);
+
+  return (
+    <Popper.Anchor
+      virtualRect={virtualRef}
+      {...props}
+      // eslint-disable-next-line react-hooks/refs
+      onContextMenu={composeHandlers(onContextMenu, (event) => {
+        const { clientX, clientY } = event;
+        const rect = DOMRect.fromRect({ x: clientX, y: clientY });
+        virtualRef.current = rect;
+        context.onOpenChange(true);
+        event.preventDefault();
+      })}
+    />
+  );
+};
+
+MenuContextArea.displayName = DISPLAY_NAME;

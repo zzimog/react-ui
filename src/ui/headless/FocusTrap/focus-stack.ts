@@ -1,10 +1,14 @@
-type StackItem = {
-  current: boolean;
+import { useConstant } from '@ui/hooks';
+
+type StackAPI = {
+  enabled: boolean;
+  pause(): void;
+  resume(): void;
 };
 
-const stack: StackItem[] = [];
+const stack: StackAPI[] = [];
 
-function removeItem(item: StackItem) {
+function removeItem(item: StackAPI) {
   const index = stack.indexOf(item);
   if (index !== -1) {
     stack.splice(index, 1);
@@ -12,19 +16,28 @@ function removeItem(item: StackItem) {
 }
 
 export const FocusStack = {
-  add(item: StackItem) {
-    if (stack[0] && item !== stack[0]) {
-      stack[0].current = false;
+  add(item: StackAPI) {
+    if (item !== stack[0]) {
+      stack[0]?.pause();
     }
 
     removeItem(item);
     stack.unshift(item);
   },
-  remove(item: StackItem) {
+  remove(item: StackAPI) {
     removeItem(item);
-
-    if (stack[0]) {
-      stack[0].current = true;
-    }
+    stack[0]?.resume();
   },
 };
+
+export function useFocusStackAPI() {
+  return useConstant<StackAPI>({
+    enabled: true,
+    pause() {
+      this.enabled = false;
+    },
+    resume() {
+      this.enabled = true;
+    },
+  });
+}
