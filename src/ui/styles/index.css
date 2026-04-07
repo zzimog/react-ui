@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --white: #fefffc;
+  --white: #fefcff;
   --black: var(--color-zinc-950);
   --shape: var(--radius-md);
 
@@ -14,14 +14,13 @@
   --muted-background: var(--color-zinc-200);
   --primary: var(--color-violet-500);
   --primary-contrast: var(--color-zinc-50);
-  --danger: var(--color-rose-500);
-  --danger-contrast: var(--color-zinc-900);
+  --danger: var(--color-rose-800);
+  --danger-contrast: var(--white);
   --highlight: var(--color-violet-200);
   --highlight-contrast: var(--foreground);
   --card: var(--color-zinc-50);
   --card-contrast: var(--color-zinc-900);
   --border: var(--color-zinc-300);
-  --shadow: var(--color-zinc-200);
   --input: var(--color-white);
   --outline: --alpha(var(--color-primary) / 50%);
 }
@@ -36,7 +35,6 @@
   --card: var(--color-zinc-900);
   --card-contrast: var(--color-zinc-50);
   --border: var(--color-zinc-700);
-  --shadow: var(--color-black);
   --input: var(--color-zinc-800);
 }
 
@@ -57,7 +55,6 @@
   --color-card: var(--card);
   --color-card-contrast: var(--card-contrast);
   --color-border: var(--border);
-  --color-shadow: var(--shadow);
   --color-input: var(--input);
   --color-outline: var(--outline);
 }
@@ -92,10 +89,6 @@
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: calc(var(--spacing) * 3);
-  }
-
-  .shadow {
-    @apply shadow-shadow;
   }
 
   .focusable {

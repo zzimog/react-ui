@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef } from 'react';
+import { useCallback, type ComponentPropsWithRef } from 'react';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
@@ -18,6 +18,15 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
 
   const mergedRef = useMergedRefs(refProp, onContentChange);
 
+  const handleOutside = useCallback(
+    (event: Event) => {
+      if (event.target === trigger) {
+        event.preventDefault();
+      }
+    },
+    [trigger]
+  );
+
   return (
     <Menu.Collection>
       <MenuContent
@@ -28,14 +37,12 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
         id={context.contentId}
         aria-labelledby={context.triggerId}
         {...props}
-        onFocusOutside={(event) => {
-          if (event.target === trigger) {
-            event.preventDefault();
-          }
-        }}
+        onFocusOutside={handleOutside}
+        onPointerDownOutside={handleOutside}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowLeft') {
             context.onOpenChange(false);
+            trigger?.focus();
           }
         })}
       />

@@ -1,4 +1,5 @@
 import { useState, type PropsWithChildren } from 'react';
+import * as Icons from 'lucide-react';
 import type { MDXComponents, MDXContent } from 'mdx/types';
 import { NavLink } from 'react-router';
 import { Card, cn, Code, CodeBlock, createScopedContext, Table } from '@ui';
@@ -124,6 +125,7 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
               </div>
             );
           },
+          ...(Icons as object),
           ...(UIComponents as object),
           ...components,
         }}

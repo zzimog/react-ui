@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Native, Popper, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
-import { composeHandlers } from '../../utils/compose-handlers';
+import { composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
 
 const DISPLAY_NAME = 'MenuTrigger';

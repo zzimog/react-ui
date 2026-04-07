@@ -1,4 +1,5 @@
 export { default as PageAccordion } from './accordion.mdx';
+export { default as PageButton } from './button.mdx';
 export { default as PageCard } from './card.mdx';
 export { default as PageField } from './field.mdx';
 export { default as PageHome } from './home.mdx';

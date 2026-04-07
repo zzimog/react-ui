@@ -28,6 +28,7 @@ export const MenuContent = (inProps: MenuProps) => {
     onPointerLeave,
     onKeyDown,
     onFocusOutside,
+    onPointerDownOutside,
     onDismiss,
     ...props
   } = inProps;
@@ -46,6 +47,7 @@ export const MenuContent = (inProps: MenuProps) => {
 
   return (
     <Popper.Content
+      avoidCollisions
       distance={distance}
       side={side}
       align={align}
@@ -54,6 +56,7 @@ export const MenuContent = (inProps: MenuProps) => {
       <Dismissable
         asChild
         onFocusOutside={onFocusOutside}
+        onPointerDownOutside={onPointerDownOutside}
         onDismiss={() => {
           onDismiss?.();
           context.onOpenChange(false);
@@ -78,9 +81,7 @@ export const MenuContent = (inProps: MenuProps) => {
 
             if (NAV_KEYS.includes(event.key)) {
               const items = getItems();
-              const nodes = items
-                .filter((item) => !item.disabled)
-                .map((i) => i.node);
+              const nodes = items.map((i) => i.node);
 
               const active = document.activeElement as HTMLElement | null;
               const index = nodes.findIndex((n) => n === active);

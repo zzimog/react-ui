@@ -1,0 +1,118 @@
+# Button
+
+Displays a button.
+
+<Demo>
+  <div className="w-fit mx-auto">
+    <Button>Button</Button>
+  </div>
+</Demo>
+
+```tsx
+<Button />
+```
+
+## Sizes
+
+<Demo>
+  <div className="flex justify-center items-center flex-wrap gap-3">
+    <Button size="sm">Small</Button>
+    <Button size="md">Medium</Button>
+    <Button size="lg">Large</Button>
+  </div>
+</Demo>
+
+```tsx
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+```
+
+## Variants
+
+<Demo>
+  <div className="flex justify-center flex-wrap gap-3">
+    <Button variant="default">Default</Button>
+    <Button variant="primary">Primary</Button>
+    <Button variant="danger">Danger</Button>
+    <Button variant="outlined">Outlined</Button>
+    <Button variant="ghost">Ghost</Button>
+  </div>
+</Demo>
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="primary">Primary</Button>
+<Button variant="danger">Danger</Button>
+<Button variant="outlined">Outlined</Button>
+<Button variant="ghost">Ghost</Button>
+```
+
+### Outlined & Ghost
+
+`Outlined` and `Ghost` variants inherit their colors from current text color.
+
+<Demo>
+  <div className="w-fit flex flex-wrap gap-3 mx-auto p-4 rounded-shape text-white bg-purple-500">
+    <Button variant="outlined">Outlined</Button>
+    <Button variant="ghost">Ghost</Button>
+  </div>
+</Demo>
+
+```tsx
+<div className="text-white bg-purple-500">
+  <Button variant="outlined" />
+  <Button variant="ghost" />
+</div>
+```
+
+## With Icon
+
+<Demo>
+  <div className="flex items-center gap-3 w-fit mx-auto">
+    <Button size="sm" icon={<Home />} />
+    <Button size="md" icon={<Home />} />
+    <Button size="lg" icon={<Home />} />
+  </div>
+  <div className="flex items-center gap-3 w-fit mx-auto mt-3">
+    <Button size="sm" icon={<Home />}>Home</Button>
+    <Button size="md" icon={<Home />}>Home</Button>
+    <Button size="lg" icon={<Home />}>Home</Button>
+  </div>
+</Demo>
+
+```tsx
+<Button icon={<Home />} />
+<Button icon={<Home />}>Home</Button>
+```
+
+## Loading
+
+<Demo>
+  <div className="w-fit mx-auto">
+    <Button icon={<></>} loading>Loading</Button>
+    <Button icon={<></>} loading className="ml-3" />
+  </div>
+</Demo>
+
+```tsx
+<Button icon={<></>} loading={true} />
+```
+
+
+## Props
+
+This component extends the `<button />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    }
+  ]}
+/>

@@ -5,6 +5,7 @@ import { Logo, MDXLoader, Nav } from '@app/components';
 import { AppMenu } from './AppMenu';
 import {
   PageAccordion,
+  PageButton,
   PageCard,
   PageField,
   PageHome,
@@ -19,6 +20,7 @@ import './App.css';
 
 const components: Record<string, MDXContent> = {
   accordion: PageAccordion,
+  button: PageButton,
   card: PageCard,
   input: PageInput,
   field: PageField,
