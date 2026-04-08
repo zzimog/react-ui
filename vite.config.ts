@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
   const outDir = isBuildDemo ? 'dist-demo' : 'dist';
 
   return {
-    base: '/react-zimog-ui',
+    base: `/${pkg.name}`,
     resolve: {
       alias: {
         '@app': resolve(__dirname, 'src/app'),

@@ -2,6 +2,7 @@ import type { MDXContent } from 'mdx/types';
 import { BrowserRouter, Link, Route, Routes } from 'react-router';
 import { ThemeSwitcher } from '@ui';
 import { Logo, MDXLoader, Nav } from '@app/components';
+import pkg from '../../package.json';
 import { AppMenu } from './AppMenu';
 import {
   PageAccordion,
@@ -31,7 +32,7 @@ const components: Record<string, MDXContent> = {
 };
 
 const App = () => (
-  <BrowserRouter basename="react-zimog-ui">
+  <BrowserRouter basename={pkg.name}>
     <div className="text-foreground bg-background min-h-screen transition-colors">
       <header className="mb-8 border-b py-8 transition">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 px-4">
