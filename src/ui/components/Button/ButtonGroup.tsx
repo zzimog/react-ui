@@ -1,6 +1,6 @@
 import { Native, type NativeProps } from '@ui/headless';
 import { cn } from '@ui/utils';
-import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
+import type { ButtonSize, ButtonVariant } from './Button';
 import { ButtonGroupContext } from './context';
 import classes from './classes';
 
@@ -9,7 +9,6 @@ type ButtonGroupProps = NativeProps<'div'> & {
   joined?: boolean;
   size?: ButtonSize;
   variant?: ButtonVariant;
-  color?: ButtonColor;
   disabled?: boolean;
 };
 
