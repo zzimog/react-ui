@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from 'react';
+import type { ComponentProps } from 'react';
 import { createScopedContext } from '@ui/utils';
 import { Menu } from './Menu';
 
@@ -12,16 +12,16 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type MenuSubProps = PropsWithChildren;
+type MenuSubProps = ComponentProps<typeof Menu>;
 
 export const MenuSub = (inProps: MenuSubProps) => {
+  const { children, ...props } = inProps;
+
   //const context = Menu.useContext(DISPLAY_NAME);
 
-  const [open, setOpen] = useState(false);
-
   return (
-    <Menu open={open} onOpenChange={setOpen}>
-      <MenuSubContext>{inProps.children}</MenuSubContext>
+    <Menu {...props}>
+      <MenuSubContext>{children}</MenuSubContext>
     </Menu>
   );
 };

@@ -29,6 +29,11 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
         id={context.contentId}
         aria-labelledby={context.triggerId}
         {...props}
+        onFocusOutside={(event) => {
+          if (event.target !== context.trigger) {
+            context.onOpenChange(false);
+          }
+        }}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowLeft') {
             context.onOpenChange(false);
