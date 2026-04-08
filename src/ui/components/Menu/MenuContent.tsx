@@ -6,6 +6,8 @@ import { Menu } from './Menu';
 import classes from './classes';
 
 const DISPLAY_NAME = 'MenuContent';
+//const SELECT_EVENT = `${DISPLAY_NAME}.ItemSelect`;
+//const EVENT_OPTIONS = { bubbles: false, cancelable: true };
 
 const NAV_KEYS = ['Home', 'End', 'ArrowUp', 'ArrowDown'];
 
@@ -26,6 +28,7 @@ type MenuProps = BaseProps & {
   distance?: number;
   side?: PopperContentProps['side'];
   align?: PopperContentProps['align'];
+  onItemSelect?(event: Event): void;
 };
 
 export const MenuContent = (inProps: MenuProps) => {
@@ -34,7 +37,7 @@ export const MenuContent = (inProps: MenuProps) => {
     className,
     distance,
     side,
-    align,
+    align: alignProp,
     onContextMenu,
     onPointerLeave,
     onKeyDown,
@@ -45,16 +48,20 @@ export const MenuContent = (inProps: MenuProps) => {
   } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
+  const { isContext } = Menu.useRootContext(DISPLAY_NAME);
   const { getItems } = Menu.useCollection();
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
 
+  const defaultAlign = isContext ? 'start' : 'center';
+  const align = alignProp || defaultAlign;
+
   return (
     <MenuContentContext
       onItemLeave={() => {
-        //const node = ref.current;
-        //node?.focus({ preventScroll: true });
+        const node = ref.current;
+        node?.focus({ preventScroll: true });
       }}
       onItemSelect={() => {
         /**

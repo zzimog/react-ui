@@ -1,4 +1,4 @@
-import { useRef, type ComponentProps } from 'react';
+import { useEffect, useRef, type ComponentProps } from 'react';
 import { Popper } from '@ui/headless';
 import { composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
@@ -12,7 +12,24 @@ export const MenuContextArea = (inProps: MenuContextAreaProps) => {
   const { onContextMenu, ...props } = inProps;
 
   const virtualRef = useRef(DOMRect.fromRect({ x: 0, y: 0 }));
+
   const context = Menu.useContext(DISPLAY_NAME);
+  const { onIsContextChange } = Menu.useRootContext(DISPLAY_NAME);
+
+  useEffect(() => {
+    onIsContextChange(true);
+    return () => onIsContextChange(false);
+  }, [onIsContextChange]);
+
+  useEffect(() => {
+    const close = () => context.onOpenChange(false);
+    window.addEventListener('resize', close);
+    window.addEventListener('scroll', close);
+    return () => {
+      window.removeEventListener('resize', close);
+      window.removeEventListener('scroll', close);
+    };
+  });
 
   return (
     <Popper.Anchor

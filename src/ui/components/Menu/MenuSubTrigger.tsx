@@ -22,21 +22,28 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
   useEffect(() => {
     const node = ref.current;
     if (node) {
+      let timeoutId: number;
+
       function handleLeave(event: PointerEvent) {
         const target = event.relatedTarget as HTMLElement;
         const isInSubTree = content?.contains(target);
         if (!isInSubTree) {
+          clearTimeout(timeoutId);
           context.onOpenChange(false);
         }
       }
 
       function handleEnter() {
-        context.onOpenChange(true);
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          context.onOpenChange(true);
+        }, 300);
       }
 
       node.addEventListener('pointerenter', handleEnter);
       node.addEventListener('pointerleave', handleLeave);
       return () => {
+        clearTimeout(timeoutId);
         node.removeEventListener('pointerenter', handleEnter);
         node.removeEventListener('pointerleave', handleLeave);
       };

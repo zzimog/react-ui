@@ -6,12 +6,14 @@ import {
   File,
   FileSymlink,
   Folder,
+  MenuIcon,
   PencilLine,
   Scissors,
   Text,
   Trash,
 } from 'lucide-react';
 import {
+  Button,
   Card,
   Field,
   Input,
@@ -113,14 +115,16 @@ export const TestPage = () => {
       <Title>Test page</Title>
 
       <Menu>
-        <Menu.Trigger className="mx-auto w-fit border p-2">
-          Click here...
+        <Menu.Trigger asChild className="mx-auto">
+          <Button>
+            <MenuIcon />
+          </Button>
         </Menu.Trigger>
         {DemoMenu}
       </Menu>
 
       <Menu>
-        <Menu.ContextArea className="rounded-shape mx-auto w-fit border-2 border-dashed border-current p-4">
+        <Menu.ContextArea className="rounded-shape mx-auto w-fit cursor-default border-2 border-dashed border-current p-4 select-none">
           ...or right-click here!
         </Menu.ContextArea>
         {DemoMenu}

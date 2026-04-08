@@ -1,4 +1,4 @@
-import { useId, type PropsWithChildren } from 'react';
+import { useId, useState, type PropsWithChildren } from 'react';
 import { Popper } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
@@ -17,6 +17,17 @@ import { MenuSubTrigger } from './MenuSubTrigger';
 import { MenuTrigger } from './MenuTrigger';
 
 const DISPLAY_NAME = 'Menu';
+
+type MenuRootContextValue = {
+  isContext: boolean;
+  onIsContextChange(isContext: boolean): void;
+};
+
+const [MenuRootContext, useMenuRootContext] = createScopedContext<
+  MenuRootContextValue | undefined
+>(DISPLAY_NAME, undefined);
+
+/*---------------------------------------------------------------------------*/
 
 type MenuContextValue = {
   triggerId: string;
@@ -50,6 +61,8 @@ type MenuProps = PropsWithChildren<{
 export const Menu = (inProps: MenuProps) => {
   const { defaultOpen, open: openProp, onOpenChange, children } = inProps;
 
+  const [isContext, setIsContext] = useState(false);
+
   const [open, setOpen] = useControllableState({
     defaultProp: defaultOpen ?? false,
     prop: openProp,
@@ -62,20 +75,23 @@ export const Menu = (inProps: MenuProps) => {
 
   return (
     <Popper>
-      <MenuContext
-        triggerId={triggerId}
-        contentId={contentId}
-        open={open}
-        onOpenChange={setOpen}
-      >
-        <MenuCollection>{children}</MenuCollection>
-      </MenuContext>
+      <MenuRootContext isContext={isContext} onIsContextChange={setIsContext}>
+        <MenuContext
+          triggerId={triggerId}
+          contentId={contentId}
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <MenuCollection>{children}</MenuCollection>
+        </MenuContext>
+      </MenuRootContext>
     </Popper>
   );
 };
 
 Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
+Menu.useRootContext = useMenuRootContext;
 Menu.useCollection = useMenuCollection;
 Menu.Provider = MenuContext;
 Menu.Collection = MenuCollection;

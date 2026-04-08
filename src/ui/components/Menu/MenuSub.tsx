@@ -21,13 +21,13 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 type MenuSubProps = PropsWithChildren;
 
 export const MenuSub = (inProps: MenuSubProps) => {
-  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
-  const [content, setContent] = useState<HTMLElement | null>(null);
-  const [open, setOpen] = useState(false);
-
   const baseId = useId();
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
+
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+  const [content, setContent] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useState(false);
 
   return (
     <Popper>

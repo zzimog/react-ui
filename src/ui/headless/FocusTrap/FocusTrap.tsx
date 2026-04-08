@@ -19,10 +19,9 @@ interface FocusTrapProps extends BaseProps {
   onUnmount?(event: Event): void;
 }
 
-function focus(element: HTMLElement | null) {
-  if (element && element.focus) {
-    element.focus({ preventScroll: true });
-  }
+function focus(element?: HTMLElement | null) {
+  if (!element) return;
+  element.focus?.({ preventScroll: true });
 }
 
 export const FocusTrap = (inProps: FocusTrapProps) => {
@@ -102,7 +101,7 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
         node.dispatchEvent(mountEvent);
         if (!mountEvent.defaultPrevented) {
           const [first] = getFocusableEdges(node);
-          first?.focus();
+          first?.focus({ preventScroll: true });
 
           if (document.activeElement === previousActive) {
             node.focus({ preventScroll: true });
@@ -132,8 +131,8 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
       tabIndex={-1}
       {...props}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
+        const node = event.currentTarget;
         if (loop) {
-          const node = event.currentTarget;
           const isTab =
             event.key === 'Tab' &&
             !event.altKey &&
@@ -141,17 +140,14 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
             !event.metaKey;
 
           if (isTab) {
-            const currentElement = document.activeElement as HTMLElement;
             const [first, last] = getFocusableEdges(node);
+            const currentElement = document.activeElement as HTMLElement;
+            const focusLast = event.shiftKey && currentElement === first;
+            const focusFirst = !event.shiftKey && currentElement === last;
 
-            if (first && last) {
-              if (event.shiftKey && currentElement === first) {
-                event.preventDefault();
-                focus(last);
-              } else if (!event.shiftKey && currentElement === last) {
-                event.preventDefault();
-                focus(first);
-              }
+            if (focusFirst || focusLast) {
+              focus(focusFirst ? first : last);
+              event.preventDefault();
             }
           }
         }

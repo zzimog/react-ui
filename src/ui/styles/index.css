@@ -10,7 +10,7 @@
 
   --foreground: var(--black);
   --background: var(--white);
-  --muted: var(--color-zinc-400);
+  --muted: var(--color-zinc-500);
   --muted-background: var(--color-zinc-200);
   --primary: var(--color-violet-500);
   --primary-contrast: var(--color-zinc-50);
@@ -28,9 +28,9 @@
 .dark:root {
   --foreground: var(--color-zinc-50);
   --background: var(--black);
-  --muted: var(--color-zinc-500);
+  --muted: var(--color-zinc-400);
   --muted-background: var(--color-zinc-700);
-  --highlight: var(--color-violet-900);
+  --highlight: var(--color-violet-600);
   --highlight-contrast: var(--foreground);
   --card: var(--color-zinc-900);
   --card-contrast: var(--color-zinc-50);

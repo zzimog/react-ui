@@ -1,4 +1,4 @@
-import { useCallback, type ComponentPropsWithRef } from 'react';
+import { useCallback, useRef, type ComponentPropsWithRef } from 'react';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
 import { Menu } from './Menu';
@@ -17,6 +17,7 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
   const { trigger, onContentChange } = MenuSub.useContext(DISPLAY_NAME);
 
   const mergedRef = useMergedRefs(refProp, onContentChange);
+  const timeoutRef = useRef<number>(0);
 
   const handleOutside = useCallback(
     (event: Event) => {
@@ -46,6 +47,20 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
             event.preventDefault();
           }
         })}
+        onPointerEnter={(event) => {
+          clearTimeout(timeoutRef.current);
+          context.onOpenChange(true);
+          event.preventDefault();
+        }}
+        onPointerLeave={(event) => {
+          if (event.relatedTarget !== trigger) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = setTimeout(() => {
+              context.onOpenChange(false);
+              event.preventDefault();
+            }, 500);
+          }
+        }}
       />
     </Menu.Collection>
   );
