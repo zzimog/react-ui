@@ -1,16 +1,10 @@
-import { useId, useState, type PropsWithChildren } from 'react';
-import { Popper } from '@ui/headless';
+import { useState, type PropsWithChildren } from 'react';
 import { createScopedContext } from '@ui/utils';
 import { Menu } from './Menu';
 
 const DISPLAY_NAME = 'MenuSub';
 
-type MenuSubContextValue = {
-  trigger: HTMLElement | null;
-  content: HTMLElement | null;
-  onTriggerChange(trigger: HTMLElement | null): void;
-  onContentChange(element: HTMLElement | null): void;
-};
+type MenuSubContextValue = object;
 
 const [MenuSubContext, useMenuSubContext] = createScopedContext<
   MenuSubContextValue | undefined
@@ -21,32 +15,14 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 type MenuSubProps = PropsWithChildren;
 
 export const MenuSub = (inProps: MenuSubProps) => {
-  const baseId = useId();
-  const triggerId = `${baseId}-trigger`;
-  const contentId = `${baseId}-content`;
+  //const context = Menu.useContext(DISPLAY_NAME);
 
-  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
-  const [content, setContent] = useState<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
 
   return (
-    <Popper>
-      <Menu.Provider
-        triggerId={triggerId}
-        contentId={contentId}
-        open={open}
-        onOpenChange={setOpen}
-      >
-        <MenuSubContext
-          trigger={trigger}
-          content={content}
-          onTriggerChange={setTrigger}
-          onContentChange={setContent}
-        >
-          {inProps.children}
-        </MenuSubContext>
-      </Menu.Provider>
-    </Popper>
+    <Menu open={open} onOpenChange={setOpen}>
+      <MenuSubContext>{inProps.children}</MenuSubContext>
+    </Menu>
   );
 };
 

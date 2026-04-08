@@ -33,7 +33,11 @@ type MenuContextValue = {
   triggerId: string;
   contentId: string;
   open: boolean;
+  trigger: HTMLElement | null;
+  content: HTMLElement | null;
   onOpenChange(open: boolean): void;
+  onTriggerChange(trigger: HTMLElement | null): void;
+  onContentChange(element: HTMLElement | null): void;
 };
 
 const [MenuContext, useMenuContext] = createScopedContext<
@@ -61,7 +65,9 @@ type MenuProps = PropsWithChildren<{
 export const Menu = (inProps: MenuProps) => {
   const { defaultOpen, open: openProp, onOpenChange, children } = inProps;
 
-  const [isContext, setIsContext] = useState(false);
+  const baseId = useId();
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   const [open, setOpen] = useControllableState({
     defaultProp: defaultOpen ?? false,
@@ -69,9 +75,9 @@ export const Menu = (inProps: MenuProps) => {
     onChange: onOpenChange,
   });
 
-  const baseId = useId();
-  const triggerId = `${baseId}-trigger`;
-  const contentId = `${baseId}-content`;
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+  const [content, setContent] = useState<HTMLElement | null>(null);
+  const [isContext, setIsContext] = useState(false);
 
   return (
     <Popper>
@@ -80,7 +86,11 @@ export const Menu = (inProps: MenuProps) => {
           triggerId={triggerId}
           contentId={contentId}
           open={open}
+          trigger={trigger}
+          content={content}
           onOpenChange={setOpen}
+          onTriggerChange={setTrigger}
+          onContentChange={setContent}
         >
           <MenuCollection>{children}</MenuCollection>
         </MenuContext>

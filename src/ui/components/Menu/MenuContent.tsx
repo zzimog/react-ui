@@ -25,6 +25,7 @@ const [MenuContentContext, useMenuContentContext] = createScopedContext<
 type PopperContentProps = ComponentProps<typeof Popper.Content>;
 type BaseProps = ComponentProps<typeof Dismissable>;
 type MenuProps = BaseProps & {
+  trapFocus?: boolean;
   distance?: number;
   side?: PopperContentProps['side'];
   align?: PopperContentProps['align'];
@@ -34,10 +35,11 @@ type MenuProps = BaseProps & {
 export const MenuContent = (inProps: MenuProps) => {
   const {
     ref: refProp,
-    className,
+    trapFocus,
     distance,
     side,
     align: alignProp,
+    className,
     onContextMenu,
     onPointerLeave,
     onKeyDown,
@@ -56,6 +58,7 @@ export const MenuContent = (inProps: MenuProps) => {
 
   const defaultAlign = isContext ? 'start' : 'center';
   const align = alignProp || defaultAlign;
+  const trapped = trapFocus ?? context.open;
 
   return (
     <MenuContentContext
@@ -78,7 +81,14 @@ export const MenuContent = (inProps: MenuProps) => {
       >
         <Dismissable
           asChild
-          onPointerDownOutside={onPointerDownOutside}
+          onPointerDownOutside={composeHandlers(
+            onPointerDownOutside,
+            (event) => {
+              if (event.target === context.trigger) {
+                event.preventDefault();
+              }
+            }
+          )}
           onFocusOutside={composeHandlers(
             onFocusOutside,
             (event) => event.preventDefault(),
@@ -91,7 +101,7 @@ export const MenuContent = (inProps: MenuProps) => {
         >
           <FocusTrap
             asChild
-            trapped={context.open}
+            trapped={trapped}
             onMount={(event) => {
               const node = ref.current;
               node?.focus({ preventScroll: true });

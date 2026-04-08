@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Native, Popper, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
@@ -15,8 +14,7 @@ export const MenuTrigger = (inProps: MenuTriggerProps) => {
   const context = Menu.useContext(DISPLAY_NAME);
   const isOpen = context.open;
 
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
+  const mergedRef = useMergedRefs(refProp, context.onTriggerChange);
 
   return (
     <Popper.Anchor asChild>

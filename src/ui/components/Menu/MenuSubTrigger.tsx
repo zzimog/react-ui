@@ -14,10 +14,10 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
   const { ref: refProp, children, onKeyDown, ...props } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  const { content, onTriggerChange } = MenuSub.useContext(DISPLAY_NAME);
+  MenuSub.useContext(DISPLAY_NAME);
 
   const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref, onTriggerChange);
+  const mergedRef = useMergedRefs(refProp, ref, context.onTriggerChange);
 
   useEffect(() => {
     const node = ref.current;
@@ -26,7 +26,7 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
 
       function handleLeave(event: PointerEvent) {
         const target = event.relatedTarget as HTMLElement;
-        const isInSubTree = content?.contains(target);
+        const isInSubTree = context.content?.contains(target);
         if (!isInSubTree) {
           clearTimeout(timeoutId);
           context.onOpenChange(false);
@@ -48,7 +48,7 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
         node.removeEventListener('pointerleave', handleLeave);
       };
     }
-  }, [context, content]);
+  }, [context]);
 
   return (
     <Menu.Trigger asChild>
