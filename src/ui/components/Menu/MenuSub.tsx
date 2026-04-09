@@ -1,10 +1,13 @@
-import type { ComponentProps } from 'react';
+import { useCallback, type ComponentProps } from 'react';
+import { useControllableState } from '@ui/hooks';
 import { createScopedContext } from '@ui/utils';
 import { Menu } from './Menu';
 
 const DISPLAY_NAME = 'MenuSub';
 
-type MenuSubContextValue = object;
+type MenuSubContextValue = {
+  onClose(): void;
+};
 
 const [MenuSubContext, useMenuSubContext] = createScopedContext<
   MenuSubContextValue | undefined
@@ -15,14 +18,25 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 type MenuSubProps = ComponentProps<typeof Menu>;
 
 export const MenuSub = (inProps: MenuSubProps) => {
-  const { children, ...props } = inProps;
+  const { defaultOpen, open: openProp, onOpenChange, ...props } = inProps;
 
-  //const context = Menu.useContext(DISPLAY_NAME);
+  const context = Menu.useContext(DISPLAY_NAME);
+
+  const [open, setOpen] = useControllableState({
+    defaultProp: defaultOpen ?? false,
+    prop: openProp,
+    onChange: onOpenChange,
+  });
+
+  const handleClose = useCallback(() => {
+    if (!context.open) setOpen(false);
+    return () => setOpen(false);
+  }, [context.open, setOpen]);
 
   return (
-    <Menu {...props}>
-      <MenuSubContext>{children}</MenuSubContext>
-    </Menu>
+    <MenuSubContext onClose={handleClose}>
+      <Menu.Provider open={open} onOpenChange={setOpen} {...props} />
+    </MenuSubContext>
   );
 };
 

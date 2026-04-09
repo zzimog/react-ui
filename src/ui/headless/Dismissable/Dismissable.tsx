@@ -8,7 +8,7 @@ import {
 import { Native, type NativeProps } from '@ui/headless';
 import { useConstant, useMergedRefs } from '@ui/hooks';
 import { dispatchEvent } from './dispatch-event';
-import { useEventCapture } from './use-event-capture';
+import { useDocumentEvent } from './use-document-event';
 
 const DISPLAY_NAME = 'Dismissable';
 const POINTER_EVENT = `${DISPLAY_NAME}.PointerEvent`;
@@ -37,6 +37,8 @@ export const Dismissable = (inProps: DismissableProps) => {
     onFocusOutside,
     onEscapeKey,
     onDismiss,
+    onFocusCapture,
+    onBlurCapture,
     ...props
   } = inProps;
 
@@ -46,6 +48,8 @@ export const Dismissable = (inProps: DismissableProps) => {
   const mergedRef = useMergedRefs(refProp, ref);
 
   const isFirstLayerRef = useRef(true);
+  const isFocusInsideRef = useRef(false);
+
   const contextValue = useConstant({
     onEnabledChange(enabled: boolean) {
       isFirstLayerRef.current = enabled;
@@ -85,19 +89,21 @@ export const Dismissable = (inProps: DismissableProps) => {
     [handleDismiss]
   );
 
-  useEventCapture('pointerdown', (event) => {
+  useDocumentEvent('pointerdown', (event) => {
     dispatchEvent(POINTER_EVENT, event, (event) => {
       handleOutsideInteraction(event, onPointerDownOutside);
     });
   });
 
-  useEventCapture('focusin', (event) => {
-    dispatchEvent(FOCUS_EVENT, event, (event) => {
-      handleOutsideInteraction(event, onFocusOutside);
-    });
+  useDocumentEvent('focusin', (event) => {
+    if (!isFocusInsideRef.current) {
+      dispatchEvent(FOCUS_EVENT, event, (event) => {
+        handleOutsideInteraction(event, onFocusOutside);
+      });
+    }
   });
 
-  useEventCapture('keydown', handleKeyDown);
+  useDocumentEvent('keydown', handleKeyDown, true);
 
   useEffect(() => {
     context.onEnabledChange?.(false);
@@ -106,7 +112,18 @@ export const Dismissable = (inProps: DismissableProps) => {
 
   return (
     <DismissableContext value={contextValue}>
-      <Native.div ref={mergedRef} {...props} />
+      <Native.div
+        ref={mergedRef}
+        {...props}
+        onFocusCapture={(event) => {
+          onFocusCapture?.(event);
+          isFocusInsideRef.current = true;
+        }}
+        onBlurCapture={(event) => {
+          onBlurCapture?.(event);
+          isFocusInsideRef.current = false;
+        }}
+      />
     </DismissableContext>
   );
 };

@@ -11,7 +11,13 @@ type BaseProps = ComponentPropsWithRef<typeof Menu.Item>;
 type MenuSubTriggerProps = BaseProps;
 
 export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
-  const { ref: refProp, children, onKeyDown, ...props } = inProps;
+  const {
+    ref: refProp,
+    children,
+    onPointerMove,
+    onKeyDown,
+    ...props
+  } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
   MenuSub.useContext(DISPLAY_NAME);
@@ -55,6 +61,11 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
       <Menu.Item
         ref={mergedRef}
         {...props}
+        onPointerMove={composeHandlers(onPointerMove, (event) => {
+          if (context.open) {
+            event.preventDefault();
+          }
+        })}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowRight') {
             context.onOpenChange(true);

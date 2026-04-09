@@ -18,14 +18,13 @@ import { MenuTrigger } from './MenuTrigger';
 
 const DISPLAY_NAME = 'Menu';
 
-type MenuRootContextValue = {
-  isContext: boolean;
-  onIsContextChange(isContext: boolean): void;
+type MenuCollectionData = {
+  node: HTMLElement;
+  disabled?: boolean;
 };
 
-const [MenuRootContext, useMenuRootContext] = createScopedContext<
-  MenuRootContextValue | undefined
->(DISPLAY_NAME, undefined);
+const [MenuCollection, useMenuCollection] =
+  createCollection<MenuCollectionData>(DISPLAY_NAME);
 
 /*---------------------------------------------------------------------------*/
 
@@ -46,13 +45,15 @@ const [MenuContext, useMenuContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type MenuCollectionData = {
-  node: HTMLElement;
-  disabled?: boolean;
+type MenuRootContextValue = {
+  isContext: boolean;
+  onIsContextChange(isContext: boolean): void;
+  onClose(): void;
 };
 
-const [MenuCollection, useMenuCollection] =
-  createCollection<MenuCollectionData>(DISPLAY_NAME);
+const [MenuRootContext, useMenuRootContext] = createScopedContext<
+  MenuRootContextValue | undefined
+>(DISPLAY_NAME, undefined);
 
 /*---------------------------------------------------------------------------*/
 
@@ -62,12 +63,52 @@ type MenuProps = PropsWithChildren<{
   onOpenChange?(open: boolean): void;
 }>;
 
-export const Menu = (inProps: MenuProps) => {
-  const { defaultOpen, open: openProp, onOpenChange, children } = inProps;
+type BaseMenuProps = Omit<MenuProps, 'defaultOpen'>;
+type MenuProviderProps = BaseMenuProps & {
+  open: boolean;
+  onOpenChange(open: boolean): void;
+};
+
+const MenuProvider = (inProps: MenuProviderProps) => {
+  const { open, onOpenChange, children } = inProps;
 
   const baseId = useId();
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
+
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+  const [content, setContent] = useState<HTMLElement | null>(null);
+
+  return (
+    <Popper>
+      <MenuContext
+        triggerId={triggerId}
+        contentId={contentId}
+        open={open}
+        trigger={trigger}
+        content={content}
+        onOpenChange={onOpenChange}
+        onTriggerChange={setTrigger}
+        onContentChange={setContent}
+      >
+        {children}
+      </MenuContext>
+    </Popper>
+  );
+};
+
+MenuProvider.displayName = `${DISPLAY_NAME}Provider`;
+
+export const Menu = (inProps: MenuProps) => {
+  const {
+    defaultOpen,
+    open: openProp,
+    onOpenChange,
+    children,
+    ...props
+  } = inProps;
+
+  const [isContext, setIsContext] = useState(false);
 
   const [open, setOpen] = useControllableState({
     defaultProp: defaultOpen ?? false,
@@ -75,27 +116,18 @@ export const Menu = (inProps: MenuProps) => {
     onChange: onOpenChange,
   });
 
-  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
-  const [content, setContent] = useState<HTMLElement | null>(null);
-  const [isContext, setIsContext] = useState(false);
-
   return (
-    <Popper>
-      <MenuRootContext isContext={isContext} onIsContextChange={setIsContext}>
-        <MenuContext
-          triggerId={triggerId}
-          contentId={contentId}
-          open={open}
-          trigger={trigger}
-          content={content}
-          onOpenChange={setOpen}
-          onTriggerChange={setTrigger}
-          onContentChange={setContent}
+    <MenuCollection>
+      <MenuProvider open={open} onOpenChange={setOpen} {...props}>
+        <MenuRootContext
+          isContext={isContext}
+          onIsContextChange={setIsContext}
+          onClose={() => setOpen(false)}
         >
-          <MenuCollection>{children}</MenuCollection>
-        </MenuContext>
-      </MenuRootContext>
-    </Popper>
+          {children}
+        </MenuRootContext>
+      </MenuProvider>
+    </MenuCollection>
   );
 };
 
@@ -103,7 +135,7 @@ Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
 Menu.useRootContext = useMenuRootContext;
 Menu.useCollection = useMenuCollection;
-Menu.Provider = MenuContext;
+Menu.Provider = MenuProvider;
 Menu.Collection = MenuCollection;
 Menu.Trigger = MenuTrigger;
 Menu.ContextArea = MenuContextArea;

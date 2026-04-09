@@ -27,20 +27,18 @@ export const MenuItem = (inProps: MenuItemProps) => {
     ...props
   } = inProps;
 
-  const { onItemAdd, onItemRemove } = Menu.useCollection();
+  const collection = Menu.useCollection();
   const context = Menu.useContext(DISPLAY_NAME);
   const contentContext = MenuContent.useContext(DISPLAY_NAME);
 
   const mergedRef = useMergedRefs(refProp, (node: HTMLElement) => {
-    onItemAdd(node, { node, disabled });
-    return () => onItemRemove(node);
+    collection.onItemAdd(node, { node, disabled });
+    return () => collection.onItemRemove(node);
   });
 
   const handleSelect = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
-      if (disabled) {
-        return;
-      }
+      if (disabled) return;
 
       if (!event.defaultPrevented && onSelect) {
         const node = event.target as HTMLElement;

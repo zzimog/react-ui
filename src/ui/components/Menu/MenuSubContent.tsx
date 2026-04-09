@@ -14,7 +14,8 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
   const { ref: refProp, onKeyDown, ...props } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  MenuSub.useContext(DISPLAY_NAME);
+  const rootContext = Menu.useRootContext(DISPLAY_NAME);
+  const subContext = MenuSub.useContext(DISPLAY_NAME);
 
   const mergedRef = useMergedRefs(refProp, context.onContentChange);
 
@@ -29,10 +30,23 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
         id={context.contentId}
         aria-labelledby={context.triggerId}
         {...props}
+        onUnmountFocus={(event) => {
+          event.preventDefault();
+        }}
         onFocusOutside={(event) => {
           if (event.target !== context.trigger) {
             context.onOpenChange(false);
+            subContext.onClose();
           }
+        }}
+        onPointerDownOutside={(event) => {
+          if (event.target !== context.trigger) {
+            rootContext.onClose();
+          }
+        }}
+        onPointerEnter={(event) => {
+          context.onOpenChange(true);
+          event.preventDefault();
         }}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'ArrowLeft') {
@@ -41,10 +55,6 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
             event.preventDefault();
           }
         })}
-        onPointerEnter={(event) => {
-          context.onOpenChange(true);
-          event.preventDefault();
-        }}
       />
     </Menu.Collection>
   );

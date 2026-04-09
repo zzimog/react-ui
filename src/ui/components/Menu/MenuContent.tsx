@@ -12,8 +12,8 @@ const DISPLAY_NAME = 'MenuContent';
 const NAV_KEYS = ['Home', 'End', 'ArrowUp', 'ArrowDown'];
 
 type MenuContentContextValue = {
-  onItemLeave(): void;
   onItemSelect(): void;
+  onItemLeave(): void;
 };
 
 const [MenuContentContext, useMenuContentContext] = createScopedContext<
@@ -22,13 +22,17 @@ const [MenuContentContext, useMenuContentContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
+type FocusTrapProps = ComponentProps<typeof FocusTrap>;
 type PopperContentProps = ComponentProps<typeof Popper.Content>;
+
 type BaseProps = ComponentProps<typeof Dismissable>;
 type MenuProps = BaseProps & {
   trapFocus?: boolean;
   distance?: number;
   side?: PopperContentProps['side'];
   align?: PopperContentProps['align'];
+  onMountFocus?: FocusTrapProps['onMount'];
+  onUnmountFocus?: FocusTrapProps['onUnmount'];
   onItemSelect?(event: Event): void;
 };
 
@@ -41,8 +45,9 @@ export const MenuContent = (inProps: MenuProps) => {
     align: alignProp,
     className,
     onContextMenu,
-    onPointerLeave,
     onKeyDown,
+    onMountFocus,
+    onUnmountFocus,
     onPointerDownOutside,
     onFocusOutside,
     onDismiss,
@@ -50,29 +55,29 @@ export const MenuContent = (inProps: MenuProps) => {
   } = inProps;
 
   const context = Menu.useContext(DISPLAY_NAME);
-  const { isContext } = Menu.useRootContext(DISPLAY_NAME);
+  const rootContext = Menu.useRootContext(DISPLAY_NAME);
   const { getItems } = Menu.useCollection();
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
 
-  const defaultAlign = isContext ? 'start' : 'center';
+  const defaultAlign = rootContext.isContext ? 'start' : 'center';
   const align = alignProp || defaultAlign;
   const trapped = trapFocus ?? context.open;
 
   return (
     <MenuContentContext
+      onItemSelect={() => {
+        context.onOpenChange(false);
+        rootContext.onClose();
+      }}
       onItemLeave={() => {
         const node = ref.current;
         node?.focus({ preventScroll: true });
       }}
-      onItemSelect={() => {
-        /**
-         * @todo
-         */
-      }}
     >
       <Popper.Content
+        asChild
         avoidCollisions
         distance={distance}
         side={side}
@@ -102,23 +107,22 @@ export const MenuContent = (inProps: MenuProps) => {
           <FocusTrap
             asChild
             trapped={trapped}
-            onMount={(event) => {
-              const node = ref.current;
-              node?.focus({ preventScroll: true });
+            onMount={composeHandlers(onMountFocus, (event) => {
+              const target = event.target as HTMLElement | null;
+              target?.focus({ preventScroll: true });
               event.preventDefault();
-            }}
+            })}
+            onUnmount={onUnmountFocus}
           >
             <Native.div
               ref={mergedRef}
               role="menu"
               tabIndex={0}
+              data-open={context.open}
               {...props}
-              className={cn(classes.root, className)}
+              className={cn(classes.content, className)}
               onContextMenu={composeHandlers(onContextMenu, (event) => {
                 event.preventDefault();
-              })}
-              onPointerLeave={composeHandlers(onPointerLeave, (event) => {
-                event.currentTarget.focus();
               })}
               onKeyDown={composeHandlers(onKeyDown, (event) => {
                 if (event.key === 'Tab') {

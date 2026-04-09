@@ -1,5 +1,5 @@
 const classes = {
-  root: [
+  content: [
     'flex',
     'flex-col',
     'p-1',
@@ -7,14 +7,11 @@ const classes = {
     'text-card-contrast',
     'bg-card',
     'rounded-shape-1',
-    'transition',
     'outline-0',
     'shadow-sm',
-    /**
-     * Debug only
-     * @todo To be removed
-     */
-    'focus:border-foreground',
+    'transition-colors',
+    'data-[open=true]:animate-in',
+    'data-[open=false]:animate-out',
   ],
   label: 'text-muted px-2 py-1 text-xs font-extrabold transition',
   separator: 'w-full h-px my-1 bg-border transition',
