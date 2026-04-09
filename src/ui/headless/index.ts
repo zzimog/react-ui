@@ -7,3 +7,4 @@ export * from './Interactive';
 export * from './Native';
 export * from './Popper';
 export * from './Presence';
+export * from './RovingGroup';

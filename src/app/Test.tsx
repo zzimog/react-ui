@@ -6,11 +6,30 @@ import {
   Label,
   Password,
   RadioGroup,
+  RovingGroup,
   Slider,
   Switch,
   Title,
 } from '@ui';
 import { DemoMenuContext, DemoMenuDropdown } from './demos';
+
+const DemoRovingGroup = () => {
+  const rootClsx =
+    'flex p-1 border text-card-contrast bg-card rounded-shape-1 outline-0 shadow-sm transition-color';
+
+  const itemClsx =
+    'inline-flex gap-2 rounded-shape text-sm/4 p-2 select-none focus:bg-highlight outline-0 [&_svg]:size-4 aria-disabled:opacity-50 aria-expanded:bg-highlight/50';
+
+  return (
+    <RovingGroup className={rootClsx}>
+      <RovingGroup.Item className={itemClsx}>Lorem</RovingGroup.Item>
+      <RovingGroup.Item className={itemClsx}>Ispum</RovingGroup.Item>
+      <RovingGroup.Item className={itemClsx}>Dolor</RovingGroup.Item>
+      <RovingGroup.Item className={itemClsx}>Sit</RovingGroup.Item>
+      <RovingGroup.Item className={itemClsx}>Amet</RovingGroup.Item>
+    </RovingGroup>
+  );
+};
 
 export const TestPage = () => {
   const [sliderValue, setSliderValue] = useState(12);
@@ -18,6 +37,9 @@ export const TestPage = () => {
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
+
+      <b>Roving group</b>
+      <DemoRovingGroup />
 
       <DemoMenuDropdown />
       <DemoMenuContext />
@@ -39,7 +61,6 @@ export const TestPage = () => {
           </Label>
         </RadioGroup>
       </Field.Set>
-
       <Card>
         <Card.Content>
           <Field>
@@ -73,7 +94,6 @@ export const TestPage = () => {
           </Field>
         </Card.Content>
       </Card>
-
       <Card>
         <Card.Content className="flex justify-center gap-2">
           <Switch />
