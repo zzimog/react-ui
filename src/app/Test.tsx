@@ -14,19 +14,38 @@ import {
 import { DemoMenuContext, DemoMenuDropdown } from './demos';
 
 const DemoRovingGroup = () => {
-  const rootClsx =
-    'flex p-1 border text-card-contrast bg-card rounded-shape-1 outline-0 shadow-sm transition-color';
-
-  const itemClsx =
-    'inline-flex gap-2 rounded-shape text-sm/4 p-2 select-none focus:bg-highlight outline-0 [&_svg]:size-4 aria-disabled:opacity-50 aria-expanded:bg-highlight/50';
+  const Item = (props: { children: string }) => {
+    useState(false);
+    return (
+      <RovingGroup.Item
+        className={[
+          'inline-flex',
+          'gap-2',
+          'p-2',
+          'rounded-shape',
+          'select-none',
+          'focus:bg-highlight',
+          'aria-expanded:bg-highlight/50',
+          'aria-disabled:opacity-50',
+          'data-highlight:bg-highlight/50',
+        ].join(' ')}
+      >
+        {props.children}
+      </RovingGroup.Item>
+    );
+  };
 
   return (
-    <RovingGroup className={rootClsx}>
-      <RovingGroup.Item className={itemClsx}>Lorem</RovingGroup.Item>
-      <RovingGroup.Item className={itemClsx}>Ispum</RovingGroup.Item>
-      <RovingGroup.Item className={itemClsx}>Dolor</RovingGroup.Item>
-      <RovingGroup.Item className={itemClsx}>Sit</RovingGroup.Item>
-      <RovingGroup.Item className={itemClsx}>Amet</RovingGroup.Item>
+    <RovingGroup
+      loop
+      orientation="horizontal"
+      className="text-card-contrast bg-card rounded-shape-1 transition-color flex border p-1 shadow-sm outline-0"
+    >
+      <Item>Lorem</Item>
+      <Item>Ispum</Item>
+      <Item>Dolor</Item>
+      <Item>Sit</Item>
+      <Item>Amet</Item>
     </RovingGroup>
   );
 };

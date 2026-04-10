@@ -1,4 +1,4 @@
-import { type AriaAttributes } from 'react';
+import { useState, type AriaAttributes } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { createCollection, createScopedContext } from '@ui/utils';
 import { RovingGroupItem } from './RovingGroupItem';
@@ -10,7 +10,7 @@ const DISPLAY_NAME = 'RovingGroup';
 
 type RovingGroupCollectionData = {
   node: HTMLElement;
-  disabled: boolean;
+  focusable: boolean;
 };
 
 const [RovingGroupCollection, useRovingGroupCollection] =
@@ -22,6 +22,8 @@ type RovingGroupContextValue = {
   orientation: Orientation;
   direction: Direction;
   loop: boolean;
+  activeId: string;
+  onActiveIdChange(id: string): void;
 };
 
 const [RovingGroupContext, useRovingGroupContext] = createScopedContext<
@@ -45,10 +47,18 @@ export const RovingGroup = (inProps: RovingGroupProps) => {
     ...props
   } = inProps;
 
+  const [activeId, setActiveId] = useState('');
+
   return (
     <RovingGroupCollection>
-      <RovingGroupContext orientation={orientation} direction={dir} loop={loop}>
-        <Native.div {...props} />
+      <RovingGroupContext
+        orientation={orientation}
+        direction={dir}
+        loop={loop}
+        activeId={activeId}
+        onActiveIdChange={setActiveId}
+      >
+        <Native.div dir={dir} {...props} />
       </RovingGroupContext>
     </RovingGroupCollection>
   );
