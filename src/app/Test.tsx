@@ -4,9 +4,10 @@ import {
   Field,
   Input,
   Label,
+  Menu,
+  Menubar,
   Password,
   RadioGroup,
-  RovingGroup,
   Slider,
   Switch,
   Title,
@@ -14,39 +15,24 @@ import {
 import { DemoMenuContext, DemoMenuDropdown } from './demos';
 
 const DemoRovingGroup = () => {
-  const Item = (props: { children: string }) => {
-    useState(false);
-    return (
-      <RovingGroup.Item
-        className={[
-          'inline-flex',
-          'gap-2',
-          'p-2',
-          'rounded-shape',
-          'select-none',
-          'focus:bg-highlight',
-          'aria-expanded:bg-highlight/50',
-          'aria-disabled:opacity-50',
-          'data-highlight:bg-highlight/50',
-        ].join(' ')}
-      >
-        {props.children}
-      </RovingGroup.Item>
-    );
-  };
-
   return (
-    <RovingGroup
-      loop
-      orientation="horizontal"
-      className="text-card-contrast bg-card rounded-shape-1 transition-color flex border p-1 shadow-sm outline-0"
-    >
-      <Item>Lorem</Item>
-      <Item>Ispum</Item>
-      <Item>Dolor</Item>
-      <Item>Sit</Item>
-      <Item>Amet</Item>
-    </RovingGroup>
+    <Menubar>
+      <Menubar.Item>Lorem</Menubar.Item>
+      <Menubar.Item>Ispum</Menubar.Item>
+      <Menubar.Item>Dolor</Menubar.Item>
+      <Menubar.Menu>
+        <Menu.Trigger asChild>
+          <Menubar.Item>Sit</Menubar.Item>
+        </Menu.Trigger>
+        <Menubar.Content>
+          <Menubar.MenuItem>Lorem</Menubar.MenuItem>
+          <Menubar.MenuItem>Ispum</Menubar.MenuItem>
+          <Menubar.MenuItem>Dolor</Menubar.MenuItem>
+          <Menubar.MenuItem>Sit</Menubar.MenuItem>
+        </Menubar.Content>
+      </Menubar.Menu>
+      <Menubar.Item>Amet</Menubar.Item>
+    </Menubar>
   );
 };
 

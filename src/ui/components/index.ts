@@ -7,6 +7,7 @@ export * from './Collapsible';
 export * from './Field';
 export * from './Input';
 export * from './Menu';
+export * from './Menubar';
 export * from './Password';
 export * from './RadioGroup';
 export * from './ScrollArea';

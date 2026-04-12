@@ -97,16 +97,8 @@ const MenuProvider = (inProps: MenuProviderProps) => {
   );
 };
 
-MenuProvider.displayName = `${DISPLAY_NAME}Provider`;
-
 export const Menu = (inProps: MenuProps) => {
-  const {
-    defaultOpen,
-    open: openProp,
-    onOpenChange,
-    children,
-    ...props
-  } = inProps;
+  const { defaultOpen, open: openProp, onOpenChange, ...props } = inProps;
 
   const [isContext, setIsContext] = useState(false);
 
@@ -118,19 +110,18 @@ export const Menu = (inProps: MenuProps) => {
 
   return (
     <MenuCollection>
-      <MenuProvider open={open} onOpenChange={setOpen} {...props}>
-        <MenuRootContext
-          isContext={isContext}
-          onIsContextChange={setIsContext}
-          onClose={() => setOpen(false)}
-        >
-          {children}
-        </MenuRootContext>
-      </MenuProvider>
+      <MenuRootContext
+        isContext={isContext}
+        onIsContextChange={setIsContext}
+        onClose={() => setOpen(false)}
+      >
+        <MenuProvider open={open} onOpenChange={setOpen} {...props} />
+      </MenuRootContext>
     </MenuCollection>
   );
 };
 
+MenuProvider.displayName = `${DISPLAY_NAME}Provider`;
 Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
 Menu.useRootContext = useMenuRootContext;

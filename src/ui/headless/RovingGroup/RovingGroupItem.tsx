@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
@@ -8,12 +8,14 @@ import { RovingGroup } from './RovingGroup';
 const DISPLAY_NAME = 'RovingGroupItem';
 
 type RovingGroupItemProps = NativeProps<'span'> & {
+  active?: boolean;
   focusable?: boolean;
 };
 
 export const RovingGroupItem = (inProps: RovingGroupItemProps) => {
   const {
     ref: refProp,
+    active = false,
     focusable = true,
     onFocus,
     onMouseDown,
@@ -23,15 +25,22 @@ export const RovingGroupItem = (inProps: RovingGroupItemProps) => {
 
   const { getItems, ...collection } = RovingGroup.useCollection();
   const context = RovingGroup.useContext(DISPLAY_NAME);
+  const { orientation, direction, loop, activeId, onActiveIdChange } = context;
 
   const autoId = useId();
   const stopId = props.id || autoId;
-  const { orientation, direction, loop, activeId, onActiveIdChange } = context;
 
   const mergedRef = useMergedRefs(refProp, (node: HTMLElement) => {
-    collection.onItemAdd(node, { node, focusable });
+    collection.onItemAdd(node, { node, active, stopId, focusable });
     return () => collection.onItemRemove(node);
   });
+
+  useEffect(() => {
+    if (focusable) {
+      context.onItemAdd();
+      return () => context.onItemRemove();
+    }
+  }, [focusable, context]);
 
   return (
     <Native.span
@@ -40,14 +49,14 @@ export const RovingGroupItem = (inProps: RovingGroupItemProps) => {
       {...props}
       onFocus={composeHandlers(onFocus, () => onActiveIdChange(stopId))}
       onMouseDown={composeHandlers(onMouseDown, (event) => {
-        event.currentTarget.focus({ preventScroll: true });
+        if (focusable) onActiveIdChange(stopId);
+        else event.preventDefault();
       })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         const node = event.currentTarget as HTMLElement;
-        if (!focusable) return;
         if (event.target !== node) return;
 
-        const items = getItems();
+        const items = getItems().filter((i) => i.focusable);
         const nodes = items.map((i) => i.node);
         const [first, ...others] = nodes;
         const [last] = others.reverse();

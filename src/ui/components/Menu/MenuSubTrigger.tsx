@@ -24,32 +24,37 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref, context.onTriggerChange);
+  const timeoutRef = useRef(0);
 
   useEffect(() => {
     const node = ref.current;
     if (node) {
-      let timeoutId: number;
+      function handleClick() {
+        clearTimeout(timeoutRef.current);
+      }
 
       function handleLeave(event: PointerEvent) {
         const target = event.relatedTarget as HTMLElement;
         const isInSubTree = context.content?.contains(target);
         if (!isInSubTree) {
-          clearTimeout(timeoutId);
+          clearTimeout(timeoutRef.current);
           context.onOpenChange(false);
         }
       }
 
       function handleEnter() {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
           context.onOpenChange(true);
         }, 300);
       }
 
+      node.addEventListener('click', handleClick);
       node.addEventListener('pointerenter', handleEnter);
       node.addEventListener('pointerleave', handleLeave);
       return () => {
-        clearTimeout(timeoutId);
+        clearTimeout(timeoutRef.current);
+        node.removeEventListener('click', handleClick);
         node.removeEventListener('pointerenter', handleEnter);
         node.removeEventListener('pointerleave', handleLeave);
       };
