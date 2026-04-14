@@ -1,6 +1,6 @@
-export function dispatchEvent<E extends Event>(
+export function dispatchEvent(
   name: string,
-  originalEvent: E,
+  target?: HTMLElement,
   handler?: (event: Event) => void
 ) {
   const customEvent = new CustomEvent(name, {
@@ -8,7 +8,6 @@ export function dispatchEvent<E extends Event>(
     cancelable: true,
   });
 
-  const target = originalEvent.target;
   if (target && handler) {
     target.addEventListener(name, handler, { once: true });
     target.dispatchEvent(customEvent);
