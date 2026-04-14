@@ -29,9 +29,8 @@ export const MenuSub = (inProps: MenuSubProps) => {
   });
 
   const handleClose = useCallback(() => {
-    if (!context.open) setOpen(false);
-    return () => setOpen(false);
-  }, [context.open, setOpen]);
+    setOpen(false);
+  }, [setOpen]);
 
   return (
     <MenuSubContext onClose={handleClose}>

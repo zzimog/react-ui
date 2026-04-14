@@ -17,20 +17,27 @@ import { DemoMenuContext, DemoMenuDropdown } from './demos';
 const DemoRovingGroup = () => {
   return (
     <Menubar>
-      <Menubar.Item>Lorem</Menubar.Item>
-      <Menubar.Item>Ispum</Menubar.Item>
-      <Menubar.Item>Dolor</Menubar.Item>
       <Menubar.Menu>
-        <Menu.Trigger asChild>
-          <Menubar.Item>Sit</Menubar.Item>
-        </Menu.Trigger>
+        <Menubar.Trigger>File</Menubar.Trigger>
         <Menubar.Content>
-          <Menubar.MenuItem>Lorem</Menubar.MenuItem>
-          <Menubar.MenuItem>Ispum</Menubar.MenuItem>
-          <Menubar.MenuItem>Dolor</Menubar.MenuItem>
-          <Menubar.MenuItem>Sit</Menubar.MenuItem>
+          <Menubar.Item>New Tab</Menubar.Item>
+          <Menubar.Item disabled>New Window</Menubar.Item>
+          <Menu.Sub>
+            <Menubar.Item asChild>
+              <Menu.SubTrigger>Share</Menu.SubTrigger>
+            </Menubar.Item>
+            <Menu.SubContent>
+              <Menubar.Item>Email</Menubar.Item>
+              <Menubar.Item>Link</Menubar.Item>
+              <Menubar.Item>Message</Menubar.Item>
+            </Menu.SubContent>
+          </Menu.Sub>
         </Menubar.Content>
       </Menubar.Menu>
+      <Menubar.Separator />
+      <Menubar.Item>File</Menubar.Item>
+      <Menubar.Item>Ispum</Menubar.Item>
+      <Menubar.Item>Dolor</Menubar.Item>
       <Menubar.Item>Amet</Menubar.Item>
     </Menubar>
   );

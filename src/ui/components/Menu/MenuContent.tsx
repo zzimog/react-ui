@@ -1,4 +1,4 @@
-import { useRef, type ComponentProps } from 'react';
+import { useCallback, useRef, type ComponentProps } from 'react';
 import { Dismissable, FocusTrap, Native, Popper } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
@@ -67,13 +67,13 @@ export const MenuContent = (inProps: MenuProps) => {
 
   return (
     <MenuContentContext
+      onItemLeave={useCallback(() => {
+        const node = ref.current;
+        node?.focus({ preventScroll: true });
+      }, [])}
       onItemSelect={() => {
         context.onOpenChange(false);
         rootContext.onClose();
-      }}
-      onItemLeave={() => {
-        const node = ref.current;
-        node?.focus({ preventScroll: true });
       }}
     >
       <Popper.Content

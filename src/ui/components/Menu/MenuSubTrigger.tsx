@@ -14,6 +14,7 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
   const {
     ref: refProp,
     children,
+    onClick,
     onPointerMove,
     onKeyDown,
     ...props
@@ -66,6 +67,11 @@ export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
       <Menu.Item
         ref={mergedRef}
         {...props}
+        onClick={composeHandlers(onClick, (event) => {
+          if (context.open) {
+            event.preventDefault();
+          }
+        })}
         onPointerMove={composeHandlers(onPointerMove, (event) => {
           if (context.open) {
             event.preventDefault();

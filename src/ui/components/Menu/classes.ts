@@ -31,6 +31,7 @@ const classes = {
     'outline-0',
     '[&_svg]:size-4',
     'focus:bg-highlight',
+    'disabled:opacity-50',
     'aria-disabled:opacity-50',
     'aria-expanded:bg-highlight/50',
   ],

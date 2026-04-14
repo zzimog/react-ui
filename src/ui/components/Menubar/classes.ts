@@ -1,6 +1,7 @@
 const classes = {
   root: [
     'flex',
+    'items-center',
     'gap-1',
     'p-1',
     'rounded-shape-1',
@@ -11,17 +12,22 @@ const classes = {
     'shadow-sm',
     'transition-color',
   ],
+  separator: 'w-px h-6 mx-1 bg-border transition',
   item: [
     'inline-flex',
+    'items-center',
     'gap-2',
     'px-2',
     'text-sm/8',
+    'outline-0',
     'rounded-shape',
     'select-none',
-    'active:bg-highlight',
+    '[&_svg]:size-4',
     'focus:bg-highlight/50',
-    'aria-expanded:bg-highlight/50',
+    'active:bg-highlight',
+    'disabled:opacity-50',
     'aria-disabled:opacity-50',
+    'aria-expanded:bg-highlight/50',
     'data-highlight:bg-highlight/50',
   ],
 };

@@ -41,6 +41,7 @@ export const MenuSubContent = (inProps: MenuSubContentProps) => {
         }}
         onPointerDownOutside={(event) => {
           if (event.target !== context.trigger) {
+            context.onOpenChange(false);
             rootContext.onClose();
           }
         }}
