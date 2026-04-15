@@ -19,3 +19,5 @@ export * from './Table';
 export * from './Tabs';
 export * from './Text';
 export * from './ThemeSwitcher';
+export * from './Toggle';
+export * from './ToggleGroup';

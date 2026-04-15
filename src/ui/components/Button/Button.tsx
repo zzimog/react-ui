@@ -1,23 +1,17 @@
-import { useContext, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { Spinner } from '@ui/components';
-import { cn } from '@ui/utils';
+import { cn, type VariantProps } from '@ui/utils';
+import { composeHandlers } from '../../utils/compose-handlers';
 import { ButtonGroup } from './ButtonGroup';
-import { ButtonGroupContext } from './context';
 import classes from './classes';
 
-export type ButtonSize = 'sm' | 'md' | 'lg';
-
-export type ButtonVariant =
-  | 'default'
-  | 'primary'
-  | 'danger'
-  | 'outlined'
-  | 'ghost';
+type ButtonClasses = typeof classes.button;
+type ButtonVariantProps = VariantProps<ButtonClasses>;
 
 type ButtonProps = NativeProps<'button'> & {
-  size?: ButtonSize;
-  variant?: ButtonVariant;
+  size?: ButtonVariantProps['size'];
+  variant?: ButtonVariantProps['variant'];
   loading?: boolean;
   icon?: ReactNode;
 };
@@ -33,10 +27,11 @@ export const Button = (inProps: ButtonProps) => {
     className,
     children,
     onClick,
+    onPointerDown,
     ...props
   } = inProps;
 
-  const context = useContext(ButtonGroupContext);
+  const context = ButtonGroup.useContext();
 
   const mergedSize = size || context?.size;
   const mergedVariant = variant || context?.variant;
@@ -49,7 +44,10 @@ export const Button = (inProps: ButtonProps) => {
   return (
     <Native.button
       type={type}
-      disabled={mergedDisabled}
+      // Purposely use `aria-disabled` instead of `disabled` prop to
+      // maintain the button focusable for accessibility
+      aria-disabled={mergedDisabled ? 'true' : undefined}
+      {...props}
       className={cn(
         classes.button({
           size: mergedSize,
@@ -59,15 +57,15 @@ export const Button = (inProps: ButtonProps) => {
         }),
         className
       )}
-      onClick={(event) => {
-        if (loading) {
+      onClick={composeHandlers(onClick, (event) => {
+        const target = event.currentTarget;
+        target.focus({ preventScroll: true });
+      })}
+      onPointerDown={composeHandlers(onPointerDown, (event) => {
+        if (disabled || loading) {
           event.preventDefault();
-          return;
         }
-
-        onClick?.(event);
-      }}
-      {...props}
+      })}
     >
       {hasIcon && (loading ? <Spinner /> : icon)}
       {children}

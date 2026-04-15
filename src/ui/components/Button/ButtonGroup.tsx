@@ -1,14 +1,32 @@
+import { createContext, useContext } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
-import { cn } from '@ui/utils';
-import type { ButtonSize, ButtonVariant } from './Button';
-import { ButtonGroupContext } from './context';
+import { cn, type VariantProps } from '@ui/utils';
 import classes from './classes';
+
+const DISPLAY_NAME = 'ButtonGroup';
+
+type ButtonClasses = typeof classes.button;
+type ButtonVariantProps = VariantProps<ButtonClasses>;
+
+type ButtonGroupContextType = {
+  column?: boolean;
+  joined?: boolean;
+  size?: ButtonVariantProps['size'];
+  variant?: ButtonVariantProps['variant'];
+  disabled?: boolean;
+};
+
+const ButtonGroupContext = createContext<ButtonGroupContextType | undefined>(
+  undefined
+);
+
+/*---------------------------------------------------------------------------*/
 
 type ButtonGroupProps = NativeProps<'div'> & {
   column?: boolean;
   joined?: boolean;
-  size?: ButtonSize;
-  variant?: ButtonVariant;
+  size?: ButtonVariantProps['size'];
+  variant?: ButtonVariantProps['variant'];
   disabled?: boolean;
 };
 
@@ -21,7 +39,6 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
     color,
     disabled,
     className,
-    children,
     ...props
   } = inProps;
 
@@ -37,10 +54,15 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
   const classNames = classes.group({ column, joined });
 
   return (
-    <Native.div role="group" className={cn(classNames, className)} {...props}>
-      <ButtonGroupContext value={context}>{children}</ButtonGroupContext>
-    </Native.div>
+    <ButtonGroupContext value={context}>
+      <Native.div
+        role="group"
+        {...props}
+        className={cn(classNames, className)}
+      />
+    </ButtonGroupContext>
   );
 };
 
-ButtonGroup.displayName = 'ButtonGroup';
+ButtonGroup.displayName = DISPLAY_NAME;
+ButtonGroup.useContext = () => useContext(ButtonGroupContext);

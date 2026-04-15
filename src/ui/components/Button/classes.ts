@@ -25,9 +25,8 @@ const buttonClasses = cva(
     // active
     'active:bg-foreground/25',
     // disabled
-    'disabled:opacity-50',
-    'disabled:cursor-not-allowed',
-    'disabled:pointer-events-none',
+    'aria-disabled:opacity-50',
+    'aria-disabled:cursor-not-allowed',
     // icon
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',

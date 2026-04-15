@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import {
+  BoldIcon,
+  ItalicIcon,
+  MoonIcon,
+  SunIcon,
+  UnderlineIcon,
+} from 'lucide-react';
+import {
   Card,
   Field,
   Input,
@@ -11,6 +18,8 @@ import {
   Slider,
   Switch,
   Title,
+  Toggle,
+  ToggleGroup,
 } from '@ui';
 import { DemoMenuContext, DemoMenuDropdown } from './demos';
 
@@ -49,6 +58,36 @@ export const TestPage = () => {
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
+
+      <b>Toggle</b>
+      <div className="flex gap-2">
+        <Toggle>
+          <BoldIcon />
+        </Toggle>
+      </div>
+
+      <b>Toggle Group</b>
+      <ToggleGroup defaultValue="light">
+        <ToggleGroup.Item value="light">
+          <SunIcon />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="dark">
+          <MoonIcon />
+        </ToggleGroup.Item>
+      </ToggleGroup>
+
+      <b>Multiple toggle Group</b>
+      <ToggleGroup>
+        <ToggleGroup.Item value="bold">
+          <BoldIcon />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="italic" disabled>
+          <ItalicIcon />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="underline">
+          <UnderlineIcon />
+        </ToggleGroup.Item>
+      </ToggleGroup>
 
       <b>Roving group</b>
       <DemoRovingGroup />

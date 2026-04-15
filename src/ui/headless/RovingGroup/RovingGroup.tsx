@@ -50,7 +50,7 @@ type RovingGroupProps = BaseProps & {
 const RovingGroupContainer = (inProps: RovingGroupProps) => {
   const {
     orientation = 'vertical',
-    dir = 'ltr',
+    dir,
     loop = false,
     onFocus,
     ...props
@@ -71,7 +71,7 @@ const RovingGroupContainer = (inProps: RovingGroupProps) => {
   return (
     <RovingGroupContext
       orientation={orientation}
-      direction={dir}
+      direction={dir || 'ltr'}
       loop={loop}
       activeId={activeId}
       onActiveIdChange={setActiveId}
@@ -81,6 +81,7 @@ const RovingGroupContainer = (inProps: RovingGroupProps) => {
       <Native.div
         dir={dir}
         tabIndex={itemCount && !activeId ? 0 : -1}
+        aria-orientation={orientation}
         {...props}
         onFocus={composeHandlers(onFocus, (event) => {
           const node = event.currentTarget;

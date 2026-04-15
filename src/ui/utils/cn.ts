@@ -1,6 +1,8 @@
 import { clsx as _clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+export type { VariantProps } from 'class-variance-authority';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(_clsx(inputs));
 }
